@@ -59,8 +59,9 @@ Gazebo hareketi; gerçek X11 testinde 60,05 s duruş; 10/10 test.
 [Ayrıntılı test raporu](validation/RESULTS.md) sınanan durumları, ölçümleri ve
 tekrar çalıştırma komutlarını açıklar. Görüntü ve odometry videoları gerçek
 bag verilerinden; compression videoları kendi Python çözüm fonksiyonlarının
-sonuçlarından üretilmiştir. Klavye videosu Gazebo kaydıdır; tuş olayları
-kontrol node'una programla verilmiştir.
+sonuçlarından üretilmiştir. Klavye videosunda robot yakın planda görünür;
+X11 tuş olaylarını gerçek pynput dinleyicisi okur. Robot model görsellerinin
+Gazebo model yolundan bulunması düzeltilmiştir.
 
 ## Erişim
 

@@ -1,5 +1,9 @@
 # Beş ödevin geliştirme ve doğrulama sonuçları
 
+**9 Kasım klavye videosu:** Robotun görünmemesine neden olan model dosyası yolu
+düzeltildi, robotun yakın planda göründüğü kayıt eklendi. X11/pynput ile
+gerçek ileri/sol/geri/duruş akışı doğrulandı. [Video düzeltmesi](KEYBOARD_VIDEO_UPDATE.md).
+
 **9 Kasım güncellemesi:** Odometry yön modeli düzeltildi; teker hızı + normalize
 Q14 kayıt yönelimi ile gerçek ROS2 çıktısı dörtgen rota üretiyor. 73 test Jazzy
 ve Humble'da geçti. Güncel odometry açıklaması ve ölçümleri

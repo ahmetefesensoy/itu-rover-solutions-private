@@ -90,11 +90,18 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     pkg_share = get_package_share_directory('reactive_robot_sim')
     models_path = os.path.join(pkg_share, 'models')
+    # URDF package:// meshes become model://turtlebot3_description/... in SDF.
+    # Gazebo needs the package's parent directory to resolve those visuals.
+    description_parent = os.path.dirname(get_package_share_directory('turtlebot3_description'))
 
     return LaunchDescription([
         AppendEnvironmentVariable(
             name='GAZEBO_MODEL_PATH',
             value=models_path,
+        ),
+        AppendEnvironmentVariable(
+            name='GAZEBO_MODEL_PATH',
+            value=description_parent,
         ),
         DeclareLaunchArgument('gui', default_value='true'),
         DeclareLaunchArgument('rviz', default_value='false'),

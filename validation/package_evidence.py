@@ -36,6 +36,8 @@ for repo, key, description, bag_key in cases:
         if live.exists():
             evidence["real_time_x11"] = json.loads(live.read_text())
             shutil.copy2(VALIDATION / "keyboard_live_check.py", directory / "keyboard_live_check.py")
+        if (VALIDATION/"keyboard_video_results.json").exists():
+            evidence["closeup_video_revision"]=json.loads((VALIDATION/"keyboard_video_results.json").read_text())
     (directory / "results.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n")
     (directory / "README.md").write_text(
         "# Çözüm testleri\n\n9 Kasım 2026 son kontrolü: " + description +

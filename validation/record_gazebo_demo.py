@@ -7,7 +7,6 @@ import signal
 import subprocess
 import sys
 import time
-from types import SimpleNamespace
 import xml.etree.ElementTree as ET
 
 import rclpy
@@ -23,6 +22,8 @@ from keyboard_control import KeyboardControl
 def main():
     os.environ["GAZEBO_MASTER_URI"] = "http://127.0.0.1:11366"
     os.environ["GAZEBO_MODEL_DATABASE_URI"] = ""
+    description_parent=os.path.dirname(get_package_share_directory("turtlebot3_description"))
+    os.environ["GAZEBO_MODEL_PATH"]=os.pathsep.join(filter(None,(os.environ.get("GAZEBO_MODEL_PATH"),description_parent)))
     original = Path(get_package_share_directory("reactive_robot_sim")) / "worlds/obs_corridor_world.world"
     tree = ET.parse(original)
     # The supplied world references decorative Husky/Mars meshes that are not
@@ -58,20 +59,15 @@ def main():
         while not samples and time.monotonic() < end:
             pump(.1)
         assert samples, "No Gazebo odometry"
-        client = subprocess.Popen(["gzclient"], stdout=log, stderr=subprocess.STDOUT)
+        client = subprocess.Popen(["gzclient", "-g", "/tmp/librobot_recording_camera.so"], stdout=log, stderr=subprocess.STDOUT)
         pump(25)
-        cameras = subprocess.run(["gz", "camera", "-l"], text=True, capture_output=True, timeout=10)
-        for camera in cameras.stdout.splitlines():
-            camera = camera.strip()
-            if camera:
-                subprocess.run(["gz", "camera", "-c", camera, "-f", "turtlebot3_burger"], stdout=log, stderr=log, timeout=10)
-        pump(2)
         windows = subprocess.run(["xdotool", "search", "--name", "Gazebo"], text=True, capture_output=True)
         graphical = windows.returncode == 0 and bool(windows.stdout.strip())
         if graphical:
             window = windows.stdout.splitlines()[-1]
             subprocess.run(["xdotool", "windowmove", window, "0", "0", "windowsize", window, "1280", "720"], check=True)
-        controller = KeyboardControl(enable_listener=False)
+            subprocess.run(["xdotool", "windowfocus", window], check=True)
+        controller = KeyboardControl(enable_listener=True)
         executor.add_node(controller)
         pump(1)
         if graphical:
@@ -79,30 +75,36 @@ def main():
         beginning = samples[-1].copy()
         pump(2)
         phase[0] = "W: forward"
-        controller.on_press(SimpleNamespace(char="w"))
+        subprocess.run(["xdotool", "keydown", "w"], check=True)
         pump(3)
         phase[0] = "W+A: forward and left"
-        controller.on_press(SimpleNamespace(char="a"))
+        subprocess.run(["xdotool", "keydown", "a"], check=True)
         pump(2)
-        controller.on_release(SimpleNamespace(char="w"))
-        controller.on_release(SimpleNamespace(char="a"))
+        subprocess.run(["xdotool", "keyup", "w", "keyup", "a"], check=True)
         phase[0] = "Released: stopped"
         pump(2)
         phase[0] = "S: reverse"
-        controller.on_press(SimpleNamespace(char="s"))
+        subprocess.run(["xdotool", "keydown", "s"], check=True)
         pump(2)
-        controller.on_release(SimpleNamespace(char="s"))
-        controller.request_stop("Showcase complete")
-        phase[0] = "Stop requested"
+        subprocess.run(["xdotool", "keyup", "s"], check=True)
+        subprocess.run(["xdotool", "key", "Escape"], check=True)
+        phase[0] = "Esc: stopped"
         pump(3)
         assert controller.shutdown_requested
         assert abs(samples[-1]["v"]) < .03
         assert math.hypot(samples[-1]["x"]-beginning["x"], samples[-1]["y"]-beginning["y"]) > .1
-        Path("/tmp/itu-keyboard-demo.json").write_text(json.dumps({"world":"obs_corridor_world", "viewport_recorded": graphical, "missing_decorative_mesh_visuals_hidden":hidden_visuals,"collision_geometry_unchanged":True, "input":"programmatically injected WASD events into the solution node", "samples":samples}, indent=2))
+        Path("/tmp/itu-keyboard-demo.json").write_text(json.dumps({"world":"obs_corridor_world", "viewport_recorded": graphical,"camera":"rendering-only close-up plugin tracks existing robot world pose", "missing_decorative_mesh_visuals_hidden":hidden_visuals,"collision_geometry_unchanged":True, "input":"XTEST X11 key events read by the real pynput listener", "samples":samples}, indent=2))
     finally:
         if recorder is not None:
             recorder.send_signal(signal.SIGINT)
             recorder.wait(timeout=15)
+        if client is not None and client.poll() is None:
+            client.terminate()
+            try:
+                client.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                client.kill()
+                client.wait(timeout=3)
         if controller is not None:
             executor.remove_node(controller)
             controller.close()
@@ -117,13 +119,6 @@ def main():
             except subprocess.TimeoutExpired:
                 os.killpg(sim.pid, signal.SIGKILL)
                 sim.wait()
-        if client is not None and client.poll() is None:
-            client.terminate()
-            try:
-                client.wait(timeout=3)
-            except subprocess.TimeoutExpired:
-                client.kill()
-                client.wait()
         log.close()
 
 

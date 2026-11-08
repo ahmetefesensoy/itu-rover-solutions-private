@@ -43,5 +43,37 @@
       "zero_commands": 7,
       "exit_code": 0
     }
+  },
+  "closeup_video_revision": {
+    "revision_date": "2026-11-09",
+    "actual_gazebo_viewport": true,
+    "robot_closeup_frames": {
+      "3": {
+        "decoded": true,
+        "central_dark_pixels": 33306,
+        "body_and_wheels_visually_reviewed": true
+      },
+      "6": {
+        "decoded": true,
+        "central_dark_pixels": 33157,
+        "body_and_wheels_visually_reviewed": true
+      },
+      "10": {
+        "decoded": true,
+        "central_dark_pixels": 33269,
+        "body_and_wheels_visually_reviewed": true
+      }
+    },
+    "actual_x11_pynput_events": true,
+    "phase_median_velocity_m_s": {
+      "Released: stopped": -7.952678843159308e-05,
+      "Ready": -3.4485421136655615e-06,
+      "S: reverse": -0.19968382258829132,
+      "Esc: stopped": -0.0001867360227815091,
+      "W+A: forward and left": 0.1935511191130128,
+      "W: forward": 0.19981580611196642
+    },
+    "robot_mesh_resolution_fix": "GAZEBO_MODEL_PATH includes turtlebot3_description parent package directory",
+    "physics_and_controller_unchanged": true
   }
 }

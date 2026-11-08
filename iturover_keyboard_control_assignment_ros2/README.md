@@ -121,3 +121,8 @@ Bu depoyu bağımsız test etmek için [tests/README.md](tests/README.md) dosyas
 ## Bizim çözümümüzün görüntüsü
 
 [Önizleme ve açıklama](media/solution/README.md) · [Çözüm videosu](media/solution/solution_demo.mp4)
+
+Yeni kayıtta robot yakın plandadır; gerçek X11 tuşları pynput tarafından okunur.
+Gazebo görsellerinin bulunması için launch dosyası `turtlebot3_description`
+paketinin üst dizinini `GAZEBO_MODEL_PATH`'e ekler. Bu, `model://turtlebot3_description/...`
+gövde ve tekerlek dosyalarını çözer; fizik ve hız komutlarını değiştirmez.

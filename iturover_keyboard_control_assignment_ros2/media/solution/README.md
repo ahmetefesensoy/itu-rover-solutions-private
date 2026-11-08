@@ -1,17 +1,19 @@
-# Bizim klavye kontrolü sonucumuz
+# Robotun göründüğü yeni klavye kontrolü kaydı
 
-[solution_demo.mp4](solution_demo.mp4) solda gerçek Gazebo ekran kaydını,
-sağda aynı çalıştırmanın gerçek `/odom` konum ölçümlerini gösterir. Alt satırda
-o anda kontrol node'umuza verilen tuş olayı ve ölçülen hız bulunur.
+[solution_demo.mp4](solution_demo.mp4), gerçek Gazebo ekran kaydının yalnız
+viewport'u kırpılıp tuş ve ölçülen hız etiketleri eklenmiş halidir. Robot
+videoya sonradan çizilmemiştir. Kamera, gerçek TurtleBot3 görselinin simülasyondaki
+konumunu takip eden yalnızca çizim tarafında çalışan bir istemci eklentisiyle
+yakın planda tutulur. Bu eklenti fizik veya robot komutlarını değiştirmez.
 
-Sıra: W ile ileri, W+A ile ileri/sol, tuşları bırakma, S ile geri ve duruş.
-Olaylar kontrol node'umuza programla verilmiştir. Dünya `obs_corridor_world`,
-robot TurtleBot3 Burger'dır. Kayıtta depoyla gelmeyen dekoratif mesh görselleri
-gizlenmiştir; çarpışma geometrisi değiştirilmemiştir. Kamera sahneyi gösterir;
-robotun konum değişimi sağdaki ölçüm panelinde izlenir.
+X11/XTEST ile üretilen W, A ve S tuşlarını gerçek pynput dinleyicisi okur;
+çözüm node'u /cmd_vel yayınlar. İleri, ileri+sol, tuş bırakınca duruş, geri ve
+son duruş sırasıyla gösterilir. Video kısa gösterimdir; 60 saniye kuralının
+ayrı gerçek zaman testi tests/results.json içindedir.
 
-[gazebo_viewport.mp4](gazebo_viewport.mp4) ham ekran kaydı,
-[gazebo_telemetry.json](gazebo_telemetry.json) ölçümlerin kendisidir.
-Gerçek zamanlı 60 saniye kuralının ayrı sonucu `tests/results.json` içindedir.
+Ham kayıt: [gazebo_viewport.mp4](gazebo_viewport.mp4).
+Ölçümler: [gazebo_telemetry.json](gazebo_telemetry.json).
+Ödevin corridor dünyası ve TurtleBot3 Burger kullanılır. Eksik dekoratif
+mesh görselleri gizlidir; çarpışma geometrisi korunur.
 
-![Önizleme](preview.jpg)
+![Yakın plan robot](preview.jpg)

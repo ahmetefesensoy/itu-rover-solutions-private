@@ -6,7 +6,8 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / "private_bundle"
 DEST.mkdir(exist_ok=True)
-SKIP = {".git", "__pycache__", "build", "install", "devel", "log", "private_bundle", "gazebo_video_frame.jpg"}
+SKIP = {".git", "__pycache__", "build", "install", "devel", "log", "private_bundle", "gazebo_video_frame.jpg",
+        "keyboard_closeup_raw.mp4", "keyboard_closeup_check.jpg", "keyboard_closeup_telemetry.json"}
 def ignore(directory, names):
     return [n for n in names if n in SKIP or (Path(directory)/n).is_symlink() or n.endswith((".pyc", ".pyo"))]
 
@@ -49,8 +50,9 @@ readme += """## Çalıştırma ve doğrulama
 [Ayrıntılı test raporu](validation/RESULTS.md) sınanan durumları, ölçümleri ve
 tekrar çalıştırma komutlarını açıklar. Görüntü ve odometry videoları gerçek
 bag verilerinden; compression videoları kendi Python çözüm fonksiyonlarının
-sonuçlarından üretilmiştir. Klavye videosu Gazebo kaydıdır; tuş olayları
-kontrol node'una programla verilmiştir.
+sonuçlarından üretilmiştir. Klavye videosunda robot yakın planda görünür;
+X11 tuş olaylarını gerçek pynput dinleyicisi okur. Robot model görsellerinin
+Gazebo model yolundan bulunması düzeltilmiştir.
 
 ## Erişim
 
