@@ -1,5 +1,0 @@
-[INFO] [1794172180.086709567] [rover_odometry]: Odometry ready; heading=imu, track=0.89m; stale inputs stop integration, clock rewinds reset pose.
-[WARN] [1794172180.087987264] [rover_odometry]: Assignment Q14 recording adapter enabled: normalizing Q14 quaternions despite the recording's unavailable-orientation flag. Use strict for live sensors.
-[INFO] [1794172180.095036222] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.
-[INFO] [1794172180.275156030] [rover_odometry]: Sensor inputs ready.
-[INFO] [1794172182.615057807] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.

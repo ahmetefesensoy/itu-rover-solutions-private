@@ -24,12 +24,7 @@ def quaternion_yaw(x, y, z, w):
 
 
 def recording_orientation_allowed(quaternion, orientation_available, policy):
-    """Honor ROS validity, except for an explicitly selected recording adapter.
-
-    The assignment bag stores Q14-sized quaternions but flags orientation as
-    absent. The compatibility policy accepts this exact encoding convention;
-    it never accepts a flagged-invalid unit quaternion or arbitrary scale.
-    """
+    """Allow flagged Q14 data only under the assignment recording policy."""
     if policy not in ("strict", "assignment_q14"):
         raise ValueError("orientation_policy must be strict or assignment_q14")
     if orientation_available:
@@ -84,8 +79,7 @@ class OdometryIntegrator:
         self.observed_time = now
 
     def wheel(self, side, values, now):
-        # Integrate up to the receipt time with the PREVIOUS wheel speeds.
-        # Applying a new speed to the preceding timer interval biases distance.
+        # Integrate the preceding interval with the previous wheel speeds.
         if side not in ("left", "right"):
             raise ValueError("unknown wheel side")
         rpm = average_pair(values)

@@ -1,6 +1,0 @@
-{
-  "valid_cases": 5,
-  "invalid_cases_rejected": 5,
-  "recovery": true,
-  "ROS_DISTRO": "noetic"
-}

@@ -27,7 +27,7 @@ class KeyboardControl(Node):
         self.shutdown_requested = False
         self.listener = None
         if enable_listener:
-            # Lazy import permits headless logic/integration tests without X11.
+            # Only the keyboard listener needs an X11 session.
             from pynput import keyboard
             self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
             self.listener.start()

@@ -1,9 +1,0 @@
-{
-  "world": "obs_corridor_world",
-  "model": "burger",
-  "distance_m": 0.2584369990470764,
-  "drift_after_stop_m": 8.833212414077662e-05,
-  "stopped_speed_m_s": -0.00017486787549549396,
-  "deadline_stop_and_shutdown": true,
-  "note": "Headless Gazebo Classic; synthetic keyboard events and accelerated monotonic deadline."
-}

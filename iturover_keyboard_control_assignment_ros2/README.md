@@ -1,128 +1,57 @@
-<p align="center">
-  <img src="https://github.com/itu-rover/iturover_obstacle_avoidance_assignment/assets/99661459/ac4adfa5-b237-4c0e-9f1e-56532de83b65" alt="iturover" width="300"/>
-</p>
-<p align="center">
-</p>
+# Klavye kontrolü
 
+`pynput` ile okunan WASD tuşları TurtleBot'a `/cmd_vel` üzerinden hız komutu
+gönderir. `w/s` ileri ve geri, `a/d` sola ve sağa dönüş içindir. Birlikte
+basılan tuşlar birleşir; zıt yönler birbirini götürür. Tuş bırakıldığında
+ilgili hız sıfırlanır. Hareket değişimleri terminale yazılır.
 
-# ITU Rover Keyboard Control Robot Assignment
+İlk sıfırdan farklı hız komutuyla 60 saniyelik süre başlar. Süre dolunca,
+`Esc` basılınca veya kapanış sinyali gelince node 0.25 saniye sıfır hız
+yayınlayıp kapanır. Süre monoton saatle ölçülür; simülasyonun duraklaması
+süreyi uzatmaz.
 
-Bu ödevde göreviniz python'da `pynput` kütüphanesini kullanarak klavyenizde basılan tuşları okuyan ve klavyenizdeki w,a,s,d tuşlarını kullanarak Turtlebot simülasyonunda robotu aktif bir şekilde hareket ettirmemizi sağlayan bir ROS 2 node'u yazmaktır.
+## Kurulum
 
-<br>
-<br>
-
-
-
-<p align="center">
-  <img src="https://github.com/itu-rover/iturover_obstacle_avoidance_assignment/assets/99661459/e3828def-fe18-4531-a2a4-796c0e6797b1" alt="harita" width="1200"/>
-</p>
-<p align="center">
-  <em>Robotun hareketini gerçekleştireceği parkur</em>
-</p>
-<br>
-<br>
-
-
-https://github.com/user-attachments/assets/d7e383b6-136e-4b9b-8a4f-ac0c907ff49b
-
-
-
-
-Ödevle ilgili daha fazla bilgiye ve yardımcı olacak kaynaklara aşağıdan ulaşabilirsiniz.
-
-# Kurulum
-
-Bir workspace oluşturun ve bu paketi klonlayıp derleyin.
+Ubuntu 22.04, ROS 2 Humble ve klavyeye erişebilen bir masaüstü oturumu gerekir.
+Bu klasörü `~/rover_ws/src/` içine koyun:
 
 ```bash
-mkdir -p ~/rover_ws/src
-cd ~/rover_ws/src
-git clone https://github.com/itu-rover/iturover_keyboard_control_assignment_ros2.git
+source /opt/ros/humble/setup.bash
+sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-simulations ros-humble-gazebo-ros-pkgs python3-pynput
 cd ~/rover_ws
-colcon build
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select reactive_robot_sim
 source install/setup.bash
 ```
 
-# Kullanım
-
-Turtlebot simülasyonunu kullanmak için gerekli paketleri kurun:
-
-```bash
-sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-simulations ros-humble-gazebo-ros-pkgs
-```
-
-Gazebo'yu çalıştırmak için aşağıdaki komutu terminal yardımıyla çalıştırın:
+## Çalıştırma
 
 ```bash
 ros2 launch reactive_robot_sim reactive_robot.launch.py
 ```
 
-Launch dosyası Gazebo simülasyonunu ve WASD klavye kontrol node'unu birlikte
-başlatır. `w/s` ileri-geri, `a/d` yerinde dönüş komutları verir. Tuş bırakılınca
-ilgili hız sıfırlanır; süre dolunca veya `Esc` basılınca node sıfır hız gönderip
-kapanır. 60 saniyelik süre ilk hareket tuşuna basıldığında başlar. Klavye
-dinleyicisi için Linux masaüstü oturumu gerekir.
+Bu komut Gazebo Classic simülasyonunu ve klavye node'unu birlikte başlatır.
+Robot görsellerinin bulunması için launch dosyası `turtlebot3_description`
+paketinin üst dizinini `GAZEBO_MODEL_PATH`'e ekler.
 
-Kontrol büyük/küçük harfi kabul eder. Aynı anda `w+a` ileri ve sola dönüş,
-`w+s` sıfır ileri hız verir. Süre ilk sıfırdan farklı hız komutu yayınlandığında
-başlar; tuş tekrarları süreyi uzatmaz. Her hız/yön değişimi ayrı loglanır.
-Süre ROS saatinden bağımsız, monoton saatle ölçülür; simülasyon duraklatılsa
-da 60 saniyelik sınır işler.
+Varsayılan hızlar `linear_speed=0.20` m/s ve `angular_speed=0.70` rad/s'dir.
+Yalnız kontrol node'unu çalıştırmak için:
 
-`Esc`, `Ctrl+C`, `SIGTERM`, süre bitişi veya klavye dinleyicisinin kapanması
-kontrolü durdurur. Node kapanmadan önce 0.25 saniye boyunca sıfır hız yayınlar.
-Başlangıç parametreleri `linear_speed=0.20`, `angular_speed=0.70`, `duration=60.0`.
-`SIGKILL` veya ağ kesintisinde komut gönderilemez; gerçek araç kontrolcüsünde
-ayrıca komut zaman aşımı bulunmalıdır. Simülasyonda denemeler için
-`control_state.py` ROS ve masaüstünden bağımsız olarak sınanabilir.
+```bash
+ros2 run reactive_robot_sim keyboard_control.py
+```
 
+## Test ve sonuç
 
-## İsterler ve Kısıtlamalar
-<br>
-<br>
+Paket klasöründen:
 
+```bash
+python3 -m unittest discover -s tests -v
+```
 
+`tests/keyboard_live_check.py`, X11 üzerinde süre sonu ve sinyalle kapanış
+davranışlarını sınar; derlenmiş workspace, Xvfb ve python-xlib gerektirir.
 
+[Gazebo ekran kaydı](media/result.mp4)
 
-* Robot klavyenin tuşları ile aktif bir şekilde hareket ettirilebiliyor olmalıdır.
-* Robot harekete geçtikten sonra 60 saniye hareket etmelidir.
-* 60 saniyelik sürenin sonunda robot hareketini sonlandırmalı ve node kapanmalıdır.
-* Robotun hareketindeki değişimler `self.get_logger().info(...)` yardımıyla terminalde gösterilmelidir. Örneğin: _Started rotating left._ Her değişim için yapmayı unutmayınız.
-* Node ile ilgili bilgiler `self.get_logger().info(...)` yardımıyla terminalde gösterilmelidir. Örneğin: _Time limit reached. Stopping..._
-* Script'iniz ve simülasyon ortamı aynı anda launch dosyası yardımıyla çalıştırılmalıdır.
-* Launch dosyasının ismi `reactive_robot.launch.py` olmalıdır.
-* Kodunuz yorum satırlarıyla açıklanmalıdır.
-
-
-# Extra
-<br>
-<br>
-Robotun üzerinde bir imu bulunmaktadır ve `/imu` topic'i üzerinden veri yayımlamaktadır. Arzu ettiğiniz takdirde bu veriyi kullanarak odometri yapıp odometri mesajı da yayımlayabilir ve bunu RViz2'de görüntüleyebilirsiniz.
-
-
-
-https://github.com/user-attachments/assets/b80053f3-0768-4468-8743-4c6b3294c505
-
-
-
-
-# Ayrıca bakınız
-
-* https://docs.ros.org/en/humble/Tutorials.html
-* https://docs.ros2.org/humble/api/geometry_msgs/msg/Twist.html
-* https://docs.ros2.org/humble/api/nav_msgs/msg/Odometry.html
-
-## Çözüm testleri
-
-Bu depoyu bağımsız test etmek için [tests/README.md](tests/README.md) dosyasına bakın.
-Ölçümler [tests/results.json](tests/results.json) içindedir.
-
-## Bizim çözümümüzün görüntüsü
-
-[Önizleme ve açıklama](media/solution/README.md) · [Çözüm videosu](media/solution/solution_demo.mp4)
-
-Yeni kayıtta robot yakın plandadır; gerçek X11 tuşları pynput tarafından okunur.
-Gazebo görsellerinin bulunması için launch dosyası `turtlebot3_description`
-paketinin üst dizinini `GAZEBO_MODEL_PATH`'e ekler. Bu, `model://turtlebot3_description/...`
-gövde ve tekerlek dosyalarını çözer; fizik ve hız komutlarını değiştirmez.
+[Ödev kaynağı](https://github.com/itu-rover/iturover_keyboard_control_assignment_ros2)

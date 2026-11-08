@@ -1,8 +1,6 @@
 """Run: python3 -m unittest discover -s tests -v"""
 import math
-import random
 import itertools
-import bz2
 import sys
 import unittest
 from pathlib import Path
