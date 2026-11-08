@@ -133,3 +133,8 @@ Bu depoyu bağımsız test etmek için [tests/README.md](tests/README.md) dosyas
 ## Bizim çözümümüzün görüntüsü
 
 [Önizleme ve açıklama](media/solution/README.md) · [Çözüm videosu](media/solution/solution_demo.mp4)
+
+## Referans rota incelemesi
+
+9 Kasım incelemesinde mevcut teker modelinin örnek dörtgen rotadan farklı olduğu görüldü. Normalize edilmiş kayıtlı IMU yönelimiyle dörtgen rota elde edildi; geçersiz yönelim bayrağı nedeniyle bu yalnız tanısal sonuçtur. Ayrıntılar: [inceleme](../validation/ODOMETRY_REVIEW.md). Önceki 3,65 cm fark fiziksel rota doğrulaması değildir.
+

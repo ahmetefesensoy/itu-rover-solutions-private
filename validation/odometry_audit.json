@@ -1,0 +1,30 @@
+{
+  "left_rpm_ranges": [
+    [
+      -25.0,
+      108.0
+    ],
+    [
+      -12.0,
+      107.0
+    ]
+  ],
+  "right_rpm_ranges": [
+    [
+      -23.0,
+      131.0
+    ],
+    [
+      0.0,
+      126.0
+    ]
+  ],
+  "quaternion_norm_range": [
+    16383.276198611802,
+    16384.70231649022
+  ],
+  "wheel_total_yaw_deg": 939.3178651685229,
+  "diagnostic_imu_total_yaw_deg": 361.3825695034956,
+  "wheel_abs_turn_deg": 1227.7142696629217,
+  "diagnostic_imu_abs_turn_deg": 727.9638760269424
+}

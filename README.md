@@ -52,6 +52,9 @@ Gazebo hareketi; gerçek X11 testinde 60,05 s duruş; 10/10 test.
 
 [Bizim videomuz](iturover_compression_assignment/media/solution/solution_demo.mp4) · [Kod ve kullanım](iturover_compression_assignment/README.md) · [Ölçümler](iturover_compression_assignment/tests/results.json)
 
+
+**9 Kasım odometry incelemesi:** Mevcut teker modeli örnek dörtgen rotayı üretmiyor. Aynı kayıtta normalize edilmiş IMU yönelimiyle yapılan tanısal hesap dörtgen çıkıyor; ancak kayıt bu yönelimi geçersiz işaretliyor. [Karşılaştırma ve kapsam](validation/ODOMETRY_REVIEW.md). Önceki 3,65 cm sayısal uyum, gerçek rota doğruluğu değildir.
+
 ## Çalıştırma ve doğrulama
 
 [Ayrıntılı test raporu](validation/RESULTS.md) sınanan durumları, ölçümleri ve
