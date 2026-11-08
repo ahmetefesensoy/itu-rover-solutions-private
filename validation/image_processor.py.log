@@ -1,0 +1,7 @@
+[INFO] [1794161328.842423093] [image_processor]: Image processor ready; initial filter: GRAY
+[INFO] [1794161330.237511842] [image_processor]: Applying RGB
+[INFO] [1794161330.444027504] [image_processor]: Applying GRAY
+[INFO] [1794161330.650064202] [image_processor]: Applying RESIZE_UP
+[INFO] [1794161330.855164570] [image_processor]: Applying RESIZE_DOWN
+[WARN] [1794161331.060427019] [image_processor]: Ignoring invalid image: empty compressed image
+[WARN] [1794161331.367877930] [image_processor]: Ignoring unsupported filter: 'INVALID'

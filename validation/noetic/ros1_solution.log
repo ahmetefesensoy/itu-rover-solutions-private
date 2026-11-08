@@ -1,0 +1,7 @@
+[WARN] [1794161229.658470]: Ignoring invalid BZ2 message: empty or oversized compressed payload
+[INFO] [1794161229.004574]: Listening for hexadecimal BZ2 payloads on /bz2_message
+[INFO] [1794161229.578279]: Published byte 100 ('d'), occurring 3 times
+[INFO] [1794161229.597746]: Published byte 98 ('b'), occurring 2 times
+[INFO] [1794161229.617850]: Published byte 255 ('ÿ'), occurring 2 times
+[INFO] [1794161229.638007]: Published byte 101 ('e'), occurring 7 times
+[INFO] [1794161230.160172]: Published byte 122 ('z'), occurring 4 times

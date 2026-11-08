@@ -1,0 +1,57 @@
+{
+  "iturover_compression_assignment": {
+    "file": "iturover_compression_assignment/media/solution/solution_demo.mp4",
+    "duration_seconds": 12.0,
+    "fps": 20.0,
+    "frame_count": 240,
+    "width": 1280,
+    "height": 720,
+    "sampled_frames_decode": true,
+    "visible_change_mean": 2.520949435763889,
+    "bytes": 67409
+  },
+  "iturover_compression_assignment_ros2": {
+    "file": "iturover_compression_assignment_ros2/media/solution/solution_demo.mp4",
+    "duration_seconds": 12.0,
+    "fps": 20.0,
+    "frame_count": 240,
+    "width": 1280,
+    "height": 720,
+    "sampled_frames_decode": true,
+    "visible_change_mean": 2.520949435763889,
+    "bytes": 66884
+  },
+  "iturover_keyboard_control_assignment_ros2": {
+    "file": "iturover_keyboard_control_assignment_ros2/media/solution/solution_demo.mp4",
+    "duration_seconds": 14.05,
+    "fps": 20.0,
+    "frame_count": 281,
+    "width": 1280,
+    "height": 720,
+    "sampled_frames_decode": true,
+    "visible_change_mean": 2.211530671296296,
+    "bytes": 236183
+  },
+  "iturover_odometry_assignment_ros2": {
+    "file": "iturover_odometry_assignment_ros2/media/solution/solution_demo.mp4",
+    "duration_seconds": 16.0,
+    "fps": 20.0,
+    "frame_count": 320,
+    "width": 1280,
+    "height": 720,
+    "sampled_frames_decode": true,
+    "visible_change_mean": 1.3680013020833333,
+    "bytes": 129040
+  },
+  "iturover_processing_assignment_ros2": {
+    "file": "iturover_processing_assignment_ros2/media/solution/solution_demo.mp4",
+    "duration_seconds": 18.0,
+    "fps": 20.0,
+    "frame_count": 360,
+    "width": 1280,
+    "height": 720,
+    "sampled_frames_decode": true,
+    "visible_change_mean": 19.016922019675928,
+    "bytes": 685096
+  }
+}

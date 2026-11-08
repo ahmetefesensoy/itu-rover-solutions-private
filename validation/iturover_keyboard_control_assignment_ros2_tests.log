@@ -1,0 +1,15 @@
+test_all_16_combinations (test_solution.TestKeyboard.test_all_16_combinations) ... ok
+test_cancelled_keys_do_not_start_deadline (test_solution.TestKeyboard.test_cancelled_keys_do_not_start_deadline) ... ok
+test_escape_is_latched (test_solution.TestKeyboard.test_escape_is_latched) ... ok
+test_exact_60_second_deadline (test_solution.TestKeyboard.test_exact_60_second_deadline) ... ok
+test_external_stop_is_latched (test_solution.TestKeyboard.test_external_stop_is_latched) ... ok
+test_idle_time_before_movement_not_counted (test_solution.TestKeyboard.test_idle_time_before_movement_not_counted) ... ok
+test_invalid_parameters (test_solution.TestKeyboard.test_invalid_parameters) ... ok
+test_repeated_keys_do_not_restart_deadline (test_solution.TestKeyboard.test_repeated_keys_do_not_restart_deadline) ... ok
+test_unknown_keys_ignored (test_solution.TestKeyboard.test_unknown_keys_ignored) ... ok
+test_uppercase_and_release (test_solution.TestKeyboard.test_uppercase_and_release) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.009s
+
+OK

@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-08",
+  "scope": "14 test; 200 sabit tohumlu rastgele payload. Noetic üzerinde 5 geçerli ve 5 geçersiz girdi.",
+  "noetic": {
+    "valid_cases": 5,
+    "invalid_cases_rejected": 5,
+    "recovery": true,
+    "ROS_DISTRO": "noetic"
+  }
+}

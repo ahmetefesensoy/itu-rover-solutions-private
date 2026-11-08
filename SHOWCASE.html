@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="tr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İTÜ Rover — Bizim çözüm çıktılarımız</title>
+<style>
+body{margin:0;background:#101824;color:#eaf0f8;font:16px/1.55 system-ui,sans-serif}main{max-width:1280px;margin:auto;padding:40px 24px}h1{font-size:36px;margin:0 0 12px}p{color:#b9c7d8}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px}article{background:#192536;border:1px solid #31425a;border-radius:16px;overflow:hidden}article div{padding:20px}h2{margin:0 0 8px;font-size:23px}video{display:block;width:100%;background:#000;aspect-ratio:16/9}a{color:#8ec8ff}span{display:inline-block;margin:4px 8px 20px 0;padding:6px 12px;border-radius:20px;background:#243c35;color:#b9f0cc}.note{padding:18px;border-left:3px solid #6eaaff;background:#172334}@media(max-width:500px){.grid{grid-template-columns:1fr}main{padding:24px 14px}h1{font-size:28px}}
+</style>
+<main>
+<h1>Bizim beş çözümümüz nasıl çalışıyor?</h1>
+<p>Her ödevin kendi kodundan ve gerçek girdilerinden üretilen çıktılar. Videoyu başlatıp tam ekran izleyebilirsin.</p>
+<span>65 / 65 birim testi</span><span>Jazzy + Humble + Noetic</span><span>Gazebo Classic hareket/duruş kontrolü</span>
+<div class="grid">
+<article><video controls preload="metadata" poster="iturover_processing_assignment_ros2/media/solution/preview.jpg" src="iturover_processing_assignment_ros2/media/solution/solution_demo.mp4"></video><div><h2>1. Görüntü işleme</h2><p>Gerçek bag görüntüsü solda, kendi filtre çıktımız sağda. GRAY, RGB, iki kat büyütme ve yarıya küçültme.</p><a href="iturover_processing_assignment_ros2/media/solution/README.md">Açıklama</a> · <a href="iturover_processing_assignment_ros2/tests/results.json">Ölçümler</a></div></article>
+<article><video controls preload="metadata" poster="iturover_odometry_assignment_ros2/media/solution/preview.png" src="iturover_odometry_assignment_ros2/media/solution/solution_demo.mp4"></video><div><h2>2. Odometry</h2><p>23.483 gerçek sensör mesajından hesaplanan rota. Bağımsız sayısal referansla son konum farkı 3,65 cm. Animasyon hızlandırılmıştır.</p><a href="iturover_odometry_assignment_ros2/media/solution/README.md">Açıklama</a> · <a href="iturover_odometry_assignment_ros2/tests/results.json">Ölçümler</a></div></article>
+<article><video controls preload="metadata" poster="iturover_keyboard_control_assignment_ros2/media/solution/preview.jpg" src="iturover_keyboard_control_assignment_ros2/media/solution/solution_demo.mp4"></video><div><h2>3. Klavye kontrolü / Gazebo</h2><p>Kendi kontrol node'umuza verilen WASD olaylarıyla gerçek simülasyon hareketi. Ayrı gerçek zaman testinde 60,05 saniyede duruş ve temiz kapanış doğrulandı.</p><a href="iturover_keyboard_control_assignment_ros2/media/solution/README.md">Açıklama</a> · <a href="iturover_keyboard_control_assignment_ros2/tests/results.json">Ölçümler</a></div></article>
+<article><video controls preload="metadata" poster="iturover_compression_assignment_ros2/media/solution/preview.jpg" src="iturover_compression_assignment_ros2/media/solution/solution_demo.mp4"></video><div><h2>4. Compression — ROS 2</h2><p>Kendi Python çözümümüz çalıştırılarak üretilen sonuçlar: örnek metin → 101, abcdddef → 100, eşitlik ve bozuk veri.</p><a href="iturover_compression_assignment_ros2/media/solution/README.md">Açıklama</a> · <a href="iturover_compression_assignment_ros2/tests/results.json">Ölçümler</a></div></article>
+<article><video controls preload="metadata" poster="iturover_compression_assignment/media/solution/preview.jpg" src="iturover_compression_assignment/media/solution/solution_demo.mp4"></video><div><h2>5. Compression — ROS 1 Noetic</h2><p>Aynı ödevin ROS 1 çözümü. Video Python hesap sonucunu gösterir; kurulu catkin paketinin gerçek topic testleri de geçti.</p><a href="iturover_compression_assignment/media/solution/README.md">Açıklama</a> · <a href="iturover_compression_assignment/tests/results.json">Ölçümler</a></div></article>
+</div>
+<p class="note">Testlerin geçmesi bütün koşullarda %100 doğruluk garantisi değildir. Odometry için ölçülmüş gerçek konum referansı verilmemiştir; 3,65 cm iki sayısal hesabın farkıdır. <a href="validation/RESULTS.md">Ayrıntılı rapor</a>.</p>
+<p>Private depo linki tek başına erişim vermez; paylaştığın kişinin GitHub hesabını Collaborators bölümünden davet etmelisin.</p>
+</main>
+</html>

@@ -1,0 +1,28 @@
+{
+  "compression_ros2": {
+    "valid_cases": 4,
+    "invalid_cases_rejected": 5,
+    "recovery": true
+  },
+  "processing_ros2": {
+    "filters": 4,
+    "invalid_frames_rejected": 3,
+    "header_preserved": true,
+    "raw_and_compressed_agree": true,
+    "recovery": true
+  },
+  "odometry_ros2": {
+    "commanded_speed_m_s": 1.0,
+    "observed_x_m": 1.1000000000000014,
+    "stale_stop": true,
+    "clock_reset": true,
+    "tf_matches_odom": true
+  },
+  "keyboard_ros2": {
+    "uppercase": true,
+    "combined_keys": true,
+    "release": true,
+    "60_second_stop": true,
+    "headless_event_injection": true
+  }
+}

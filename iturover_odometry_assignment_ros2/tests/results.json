@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-08",
+  "scope": "19 test; 23.483 bag mesajı. Bağımsız hesapla son konum farkı 3,65 cm; gerçek konum doğruluğu ölçülmemiştir.",
+  "jazzy": {
+    "commanded_speed_m_s": 1.0,
+    "observed_x_m": 0.9000000000000004,
+    "stale_stop": true,
+    "clock_reset": true,
+    "tf_matches_odom": true
+  },
+  "humble": {
+    "commanded_speed_m_s": 1.0,
+    "observed_x_m": 1.1000000000000014,
+    "stale_stop": true,
+    "clock_reset": true,
+    "tf_matches_odom": true
+  },
+  "recorded_bag": {
+    "sensor_messages": 23483,
+    "duration_s": 191.31488800048828,
+    "solution_final_xy_m": [
+      50.35799646577286,
+      11.152520812487884
+    ],
+    "reference_final_xy_m": [
+      50.392868217507775,
+      11.163430386727415
+    ],
+    "reference_path_length_m": 221.2851651730779,
+    "endpoint_difference_m": 0.036538443852326644,
+    "invalid_wheel_samples": 0,
+    "invalid_imu_samples_ignored_in_wheel_mode": 21571,
+    "heading_source": "wheel",
+    "wheel_separation_m": 0.89,
+    "replay_identical": true,
+    "rewind_reset": true,
+    "note": "Numerical comparison only; no measured ground-truth trajectory provided."
+  }
+}

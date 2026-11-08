@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-08",
+  "scope": "10 test; 16 tuş birleşimi ve duruş/kapanış senaryoları. Gazebo Classic ile hareket ve duruş ölçümü.",
+  "jazzy": {
+    "uppercase": true,
+    "combined_keys": true,
+    "release": true,
+    "60_second_stop": true,
+    "headless_event_injection": true
+  },
+  "humble": {
+    "uppercase": true,
+    "combined_keys": true,
+    "release": true,
+    "60_second_stop": true,
+    "headless_event_injection": true
+  },
+  "gazebo": {
+    "world": "obs_corridor_world",
+    "model": "burger",
+    "distance_m": 0.2584369990470764,
+    "drift_after_stop_m": 8.833212414077662e-05,
+    "stopped_speed_m_s": -0.00017486787549549396,
+    "deadline_stop_and_shutdown": true,
+    "note": "Headless Gazebo Classic; synthetic keyboard events and accelerated monotonic deadline."
+  },
+  "real_time_x11": {
+    "deadline": {
+      "real_x11_key_received": true,
+      "stop_after_seconds": 60.04985010299424,
+      "zero_commands": 4,
+      "exit_code": 0
+    },
+    "SIGINT": {
+      "real_x11_key_received": true,
+      "stop_after_seconds": 0.051121609008987434,
+      "zero_commands": 7,
+      "exit_code": 0
+    },
+    "SIGTERM": {
+      "real_x11_key_received": true,
+      "stop_after_seconds": 0.05001527599233668,
+      "zero_commands": 7,
+      "exit_code": 0
+    }
+  }
+}

@@ -1,0 +1,5 @@
+[INFO] [1794161332.130119477] [rover_odometry]: Odometry ready; heading=wheel, track=0.89m; stale inputs stop integration, clock rewinds reset pose.
+[INFO] [1794161332.139452455] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.
+[INFO] [1794161332.319675623] [rover_odometry]: Sensor inputs ready.
+[INFO] [1794161332.960249072] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.
+[INFO] [1794161333.159727774] [rover_odometry]: Sensor inputs ready.

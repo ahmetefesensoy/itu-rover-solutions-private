@@ -1,0 +1,21 @@
+[
+  {
+    "text": "somewhere, something incredible is waiting to be known.",
+    "code": 101,
+    "count": 7
+  },
+  {
+    "text": "abcdddef",
+    "code": 100,
+    "count": 3
+  },
+  {
+    "text": "baba",
+    "code": 98,
+    "count": 2
+  },
+  {
+    "invalid": "not_hex",
+    "rejected": true
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "odometry": {
+    "sensor_messages": 23483,
+    "duration_s": 191.31488800048828,
+    "solution_final_xy_m": [
+      50.35799646577286,
+      11.152520812487884
+    ],
+    "reference_final_xy_m": [
+      50.392868217507775,
+      11.163430386727415
+    ],
+    "reference_path_length_m": 221.2851651730779,
+    "endpoint_difference_m": 0.036538443852326644,
+    "invalid_wheel_samples": 0,
+    "invalid_imu_samples_ignored_in_wheel_mode": 21571,
+    "heading_source": "wheel",
+    "wheel_separation_m": 0.89,
+    "replay_identical": true,
+    "rewind_reset": true,
+    "note": "Numerical comparison only; no measured ground-truth trajectory provided."
+  },
+  "processing": {
+    "frames_sampled": 12,
+    "filter_outputs_checked": 48,
+    "median_ms_per_filter": {
+      "GRAY": 0.9860580030363053,
+      "RGB": 1.3466145028360188,
+      "RESIZE_UP": 3.6898819962516427,
+      "RESIZE_DOWN": 0.7209869945654646
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>iturover_compression_assignment</name>
+  <version>1.0.0</version>
+  <description>ITU Rover BZ2 compression assignment for ROS 1 Noetic</description>
+  <maintainer email="rover@itu.edu.tr">ITU Rover Team</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+</package>

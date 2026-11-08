@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-08",
+  "scope": "8 test; 12 bag karesinde 48 filtre çıktısı kontrolü. JPEG kayıplıdır.",
+  "jazzy": {
+    "filters": 4,
+    "invalid_frames_rejected": 3,
+    "header_preserved": true,
+    "raw_and_compressed_agree": true,
+    "recovery": true
+  },
+  "humble": {
+    "filters": 4,
+    "invalid_frames_rejected": 3,
+    "header_preserved": true,
+    "raw_and_compressed_agree": true,
+    "recovery": true
+  },
+  "recorded_bag": {
+    "frames_sampled": 12,
+    "filter_outputs_checked": 48,
+    "median_ms_per_filter": {
+      "GRAY": 0.9860580030363053,
+      "RGB": 1.3466145028360188,
+      "RESIZE_UP": 3.6898819962516427,
+      "RESIZE_DOWN": 0.7209869945654646
+    }
+  }
+}
