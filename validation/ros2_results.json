@@ -18,6 +18,13 @@
     "clock_reset": true,
     "tf_matches_odom": true
   },
+  "odometry_imu_recording_ros2": {
+    "q14_flag_adapter": true,
+    "wheel_yaw_bias_ignored": true,
+    "ninety_degree_turn": true,
+    "flagged_unit_quaternion_rejected": true,
+    "x_after_turn_m": 1.0999999999999996
+  },
   "keyboard_ros2": {
     "uppercase": true,
     "combined_keys": true,

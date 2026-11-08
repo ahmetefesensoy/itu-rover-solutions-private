@@ -1,5 +1,11 @@
 # Beş ödevin geliştirme ve doğrulama sonuçları
 
+**9 Kasım güncellemesi:** Odometry yön modeli düzeltildi; teker hızı + normalize
+Q14 kayıt yönelimi ile gerçek ROS2 çıktısı dörtgen rota üretiyor. 73 test Jazzy
+ve Humble'da geçti. Güncel odometry açıklaması ve ölçümleri
+[ODOMETRY_CORRECTION.md](ODOMETRY_CORRECTION.md) içindedir. Aşağıdaki 8 Kasım
+odometry sayıları eski teker modelinin tarihsel ölçümleridir.
+
 8 Kasım 2026 tarihinde beş çözüm geliştirildi ve çalıştırıldı. 65 birim testi
 Jazzy ve Humble ortamlarında geçti. Dört ROS 2 paketinin derlemesi ve gerçek
 topic üzerinden entegrasyon kontrolleri, ROS 1 paketinin Noetic derlemesi ve

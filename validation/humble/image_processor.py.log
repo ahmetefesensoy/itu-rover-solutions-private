@@ -1,7 +1,7 @@
-[INFO] [1794161327.138184179] [image_processor]: Image processor ready; initial filter: GRAY
-[INFO] [1794161327.139340906] [image_processor]: Applying RGB
-[INFO] [1794161327.338681898] [image_processor]: Applying GRAY
-[INFO] [1794161327.545505495] [image_processor]: Applying RESIZE_UP
-[INFO] [1794161327.749998197] [image_processor]: Applying RESIZE_DOWN
-[WARN] [1794161327.955054700] [image_processor]: Ignoring invalid image: empty compressed image
-[WARN] [1794161328.304222734] [image_processor]: Ignoring unsupported filter: 'INVALID'
+[INFO] [1794172176.374071916] [image_processor]: Image processor ready; initial filter: GRAY
+[INFO] [1794172176.375181892] [image_processor]: Applying RGB
+[INFO] [1794172176.576582120] [image_processor]: Applying GRAY
+[INFO] [1794172176.781538398] [image_processor]: Applying RESIZE_UP
+[INFO] [1794172176.985936836] [image_processor]: Applying RESIZE_DOWN
+[WARN] [1794172177.192415162] [image_processor]: Ignoring invalid image: empty compressed image
+[WARN] [1794172177.498899860] [image_processor]: Ignoring unsupported filter: 'INVALID'

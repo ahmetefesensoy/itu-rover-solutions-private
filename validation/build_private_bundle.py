@@ -17,10 +17,10 @@ shutil.copytree(ROOT/"validation", DEST/"validation", ignore=ignore, dirs_exist_
 for name in ("SHOWCASE.html", "PLAN.md"):
     shutil.copy2(ROOT/name, DEST/name)
 (DEST/".gitignore").write_text("__pycache__/\n*.py[cod]\n/build/\n/install/\n/devel/\n/log/\n")
-(DEST/".gitattributes").write_text("*.py text eol=lf\n*.sh text eol=lf\n*.mp4 binary\n*.db3 binary\n")
+(DEST/".gitattributes").write_text("* text=auto eol=lf\n*.mp4 binary\n*.db3 binary\n*.png binary\n*.jpg binary\n")
 rows = [
     ("Görüntü işleme", "iturover_processing_assignment_ros2", "preview.jpg", "4 filtre; 48 gerçek bag çıktısı kontrolü; 8/8 birim testi"),
-    ("Odometry", "iturover_odometry_assignment_ros2", "preview.png", "23.483 mesaj; sayısal referansla 3,65 cm fark; 19/19 test"),
+    ("Düzeltilmiş odometry", "iturover_odometry_assignment_ros2", "preview.png", "23.483 mesaj; teker hızı + normalize Q14 IMU yönü; gerçek ROS2 dörtgen rota; 27/27 test"),
     ("Klavye / Gazebo", "iturover_keyboard_control_assignment_ros2", "preview.jpg", "Gazebo hareketi; gerçek X11 testinde 60,05 s duruş; 10/10 test"),
     ("Compression ROS 2", "iturover_compression_assignment_ros2", "preview.jpg", "14/14 test; gerçek DDS'de geçerli/geçersiz girdiler"),
     ("Compression ROS 1", "iturover_compression_assignment", "preview.jpg", "14/14 test; kurulu Noetic paketinde 10 mesaj senaryosu"),
@@ -35,9 +35,11 @@ Obstacle avoidance bu pakete dahil değildir.
 `SHOWCASE.html` dosyasını tarayıcıda açın. GitHub'dan da aşağıdaki video
 bağlantılarıyla tek tek görüntüleyebilir veya indirebilirsiniz.
 
-65 birim testi Jazzy ve Humble'da geçti. Bu bir test başarı oranıdır;
-gerçek araç konumu için yüzde doğruluk ölçümü değildir. Odometry'nin 3,65 cm
-farkı aynı girdilerle hesaplanan bağımsız sayısal referansa göredir.
+73 birim testi Jazzy ve Humble'da geçti. Bu bir test başarı oranıdır;
+gerçek araç konumu için yüzde doğruluk ölçümü değildir. Odometry'nin yön
+modeli düzeltildi: bu kayıt için açık Q14 uyumluluk profiliyle dörtgen rota
+üretilir. Canlı sensörlerde geçersiz yönelimi reddeden strict varsayılanı korunur.
+[9 Kasım düzeltmesi ve kapsam](validation/ODOMETRY_CORRECTION.md).
 
 """
 for title, repo, preview, metric in rows:

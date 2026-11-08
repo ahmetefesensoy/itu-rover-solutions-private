@@ -34,12 +34,14 @@ ROS 2 bag dosyasını çalıştırın.
 ros2 launch iturover_odometry_assignment rosbag.launch.py
 ```
 
-Bu launch dosyası rosbag ile birlikte `odometry.py` node'unu başlatır. Varsayılan
-hesap teker odometrisidir: her taraftaki iki RPM değeri ortalanır; teker yarıçapı
-0.135 m, teker iz genişliği çizimdeki 890 mm'dir. Hızlar `v=(vR+vL)/2` ve
-`w=(vR-vL)/0.890` ile hesaplanır; dönüşte yay boyunca konum güncellenir.
-Node `/odom` ve `odom -> base_link` TF yayınlar. Zaman rosbag'in `/clock`
-yayınından alınır. Yeni teker hızı, önceki zaman aralığına uygulanmaz.
+Bu launch dosyası rosbag ile `odometry.py` node'unu başlatır. Bu kayıt için
+ilerleme hızı dört tekerin RPM değerlerinden, yön normalize edilmiş IMU
+quaternion'undan alınır. Teker yarıçapı 0.135 m'dir; `v=(vR+vL)/2` hesaplanır.
+Yön ilk geçerli IMU ölçümüne göre sıfırlanır; konum dönüş yayı boyunca entegre
+edilir. Node `/odom` ve `odom -> base_link` TF yayınlar. Zaman `/clock`'tan gelir.
+
+Hızlandırılmış tekrar: `ros2 launch iturover_odometry_assignment rosbag.launch.py rate:=4.0`.
+Varsayılan hız 1.0, başlangıç ofseti 0.0 saniyedir (`start_offset` ile değiştirilebilir).
 
 Yalnızca odometri node'unu çalıştırmak için:
 
@@ -52,17 +54,30 @@ Sağ ve sol sensörlerden tam iki sonlu RPM değeri gerekir. Gerekli sensör ver
 0.5 saniyeden eskiyse konum sabit tutulur ve sıfır hız yayınlanır. Saat geri
 sarıldığında konum ve sensör geçmişi sıfırlanır; bag tekrarı mesafeyi biriktirmez.
 
-Bag'deki 21.571 IMU mesajında `orientation_covariance[0] == -1` bulunuyor;
-ROS mesaj sözleşmesine göre yönelim kullanılamaz. Ayrıca quaternion değerleri
-birim uzunlukta değil. Bu nedenle verilen bag için varsayılan `heading_source=wheel`
-kullanılır. Geçerli IMU verisiyle `--ros-args -p heading_source:=imu` seçilebilir;
-bu mod quaternion'u normalize eder ve ilk geçerli yaw değerini başlangıç yönü alır.
+Bag'deki 21.571 IMU mesajı yaklaşık 16384 uzunluklu (Q14 ölçekli) quaternion
+taşıyor; buna rağmen `orientation_covariance[0] == -1` yazılmış. Bu nedenle
+yalnız bu kayıt için launch dosyası açıkça `orientation_policy=assignment_q14`
+seçer. Bu uyumluluk modu, geçersiz işaretli mesajı ancak quaternion uzunluğu
+16384 değerinin %1 yakınındaysa kabul eder ve normalize eder. Başlangıçta
+uyarı logu yazılır. Sıfır, NaN, yanlış ölçek ve geçersiz işaretli birim quaternion
+kabul edilmez. Bu bir kayıt uyumluluğu varsayımıdır; fiziksel konum doğrulaması değildir.
+
+Node doğrudan çalıştırıldığında `heading_source=imu`, `orientation_policy=strict`
+varsayılandır: ROS geçersizlik işareti korunur. Canlı sensörlerde strict kullanın.
+Teker yönelim modeli `--ros-args -p heading_source:=wheel` ile seçilebilir;
+bu bag'de 939° dönüş tahmin ederek örneğe uymayan bir rota ürettiği için
+ödev launch'ında kullanılmaz. Kayıtlı IMU toplam dönüşü yaklaşık 361°'dir.
 
 Başlangıç parametreleri: `wheel_radius=0.135`, `wheel_separation=0.890`,
-`sensor_timeout=0.5`, `max_dt=0.5`, `publish_tf=true`, `odom_frame=odom`,
+`sensor_timeout=0.5`, `max_dt=0.5`, `heading_source=imu`, `orientation_policy=strict`,
+`publish_tf=true`, `odom_frame=odom`,
 `base_frame=base_link`. Kovaryans değerleri yaklaşık başlangıç değerleridir,
 sensör kalibrasyonundan çıkarılmamıştır. Teker kayması ve etkin iz genişliği
 gerçek araçta konum hatası oluşturabilir; bu bag gerçek konum referansı sağlamaz.
+
+Tam bag'in gerçek ROS oynatımında dörtgen rota oluştu. Başlangıç-bitiş uzaklığı
+yaklaşık 2.25 m'dir; bu fiziksel konum hatası olarak yorumlanmamalıdır. Sonuç
+videosu gerçek `/odom` mesajlarının hızlandırılmış rota animasyonudur.
 
 Yukarıdaki komutu yazdıktan sonra gezintimiz sırasında araçta gerçekleşen veri transferlerinin aynıları bilgisayarınızda da gerçekleşecektir.
 
@@ -133,8 +148,3 @@ Bu depoyu bağımsız test etmek için [tests/README.md](tests/README.md) dosyas
 ## Bizim çözümümüzün görüntüsü
 
 [Önizleme ve açıklama](media/solution/README.md) · [Çözüm videosu](media/solution/solution_demo.mp4)
-
-## Referans rota incelemesi
-
-9 Kasım incelemesinde mevcut teker modelinin örnek dörtgen rotadan farklı olduğu görüldü. Normalize edilmiş kayıtlı IMU yönelimiyle dörtgen rota elde edildi; geçersiz yönelim bayrağı nedeniyle bu yalnız tanısal sonuçtur. Ayrıntılar: [inceleme](../validation/ODOMETRY_REVIEW.md). Önceki 3,65 cm fark fiziksel rota doğrulaması değildir.
-

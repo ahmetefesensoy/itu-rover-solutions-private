@@ -1,0 +1,19 @@
+{
+  "heading_source": "imu",
+  "orientation_policy": "assignment_q14",
+  "actual_ros_odom_messages": 2392,
+  "recorded_duration_s": 191.31488800048828,
+  "playback_rate": 4,
+  "live_final_xy_m": [
+    -2.24150100145575,
+    -0.15686706041747178
+  ],
+  "offline_final_xy_m": [
+    -2.261010715678993,
+    -0.1781577797957312
+  ],
+  "live_vs_offline_endpoint_difference_m": 0.028877736765827073,
+  "live_total_turn_deg": 361.3825695034956,
+  "near_closed_route": true,
+  "note": "Actual ROS2 /odom output, not an offline-only rendering. No measured physical ground truth."
+}

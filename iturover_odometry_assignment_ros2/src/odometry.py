@@ -22,14 +22,15 @@ class RoverOdometry(Node):
         super().__init__("rover_odometry")
         defaults = {"publish_tf": True, "odom_frame": "odom", "base_frame": "base_link",
                     "wheel_radius": 0.135, "sensor_timeout": 0.5, "max_dt": 0.5,
-                    "wheel_separation": 0.890, "heading_source": "wheel"}
+                    "wheel_separation": 0.890, "heading_source": "imu",
+                    "orientation_policy": "strict"}
         for name, value in defaults.items():
             self.declare_parameter(name, value)
         self.odom_frame = self.get_parameter("odom_frame").value
         self.base_frame = self.get_parameter("base_frame").value
         if not self.odom_frame or not self.base_frame or self.odom_frame == self.base_frame:
             raise ValueError("odom_frame and base_frame must be nonempty and distinct")
-        self.integrator = OdometryIntegrator(**{n: self.get_parameter(n).value for n in ("wheel_radius", "sensor_timeout", "max_dt", "wheel_separation", "heading_source")})
+        self.integrator = OdometryIntegrator(**{n: self.get_parameter(n).value for n in ("wheel_radius", "sensor_timeout", "max_dt", "wheel_separation", "heading_source", "orientation_policy")})
         self.create_subscription(Float64MultiArray, "/drive_system_left_motors_feedbacks", self.left_callback, qos_profile_sensor_data)
         self.create_subscription(Float64MultiArray, "/drive_system_right_motors_feedbacks", self.right_callback, qos_profile_sensor_data)
         self.create_subscription(Imu, "/imu1/data", self.imu_callback, qos_profile_sensor_data)
@@ -39,6 +40,8 @@ class RoverOdometry(Node):
         self.last_published_time = None
         self.timer = self.create_timer(0.02, self.update, clock=Clock(clock_type=ClockType.STEADY_TIME))
         self.get_logger().info(f"Odometry ready; heading={self.integrator.heading_source}, track={self.integrator.wheel_separation}m; stale inputs stop integration, clock rewinds reset pose.")
+        if self.integrator.orientation_policy == "assignment_q14":
+            self.get_logger().warning("Assignment Q14 recording adapter enabled: normalizing Q14 quaternions despite the recording's unavailable-orientation flag. Use strict for live sensors.")
 
     def seconds(self):
         return self.get_clock().now().nanoseconds * 1e-9

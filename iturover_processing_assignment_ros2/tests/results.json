@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "scope": "8 test; 12 bag karesinde 48 filtre çıktısı kontrolü. JPEG kayıplıdır.",
   "jazzy": {
     "filters": 4,
@@ -19,10 +19,10 @@
     "frames_sampled": 12,
     "filter_outputs_checked": 48,
     "median_ms_per_filter": {
-      "GRAY": 0.9860580030363053,
-      "RGB": 1.3466145028360188,
-      "RESIZE_UP": 3.6898819962516427,
-      "RESIZE_DOWN": 0.7209869945654646
+      "GRAY": 0.998933996015694,
+      "RGB": 1.4075665021664463,
+      "RESIZE_UP": 3.2106564976857044,
+      "RESIZE_DOWN": 0.7963820025906898
     }
   }
 }

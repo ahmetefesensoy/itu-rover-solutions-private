@@ -1,6 +1,6 @@
 # Çözüm testleri
 
-8 Kasım 2026 son kontrolü: 19 test; 23.483 bag mesajı. Bağımsız hesapla son konum farkı 3,65 cm; gerçek konum doğruluğu ölçülmemiştir.
+9 Kasım 2026 son kontrolü: 27 test; 23.483 bag mesajı. Teker hızı + normalize IMU yönü; gerçek ROS2 çıktısı dörtgen rota üretir. assignment_q14 kayıt varsayımı açıktır; fiziksel doğruluk ölçülmemiştir.
 
 Depo kökünden:
 

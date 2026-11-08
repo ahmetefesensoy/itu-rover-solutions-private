@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "scope": "14 test; 200 sabit tohumlu rastgele payload. Noetic üzerinde 5 geçerli ve 5 geçersiz girdi.",
   "noetic": {
     "valid_cases": 5,

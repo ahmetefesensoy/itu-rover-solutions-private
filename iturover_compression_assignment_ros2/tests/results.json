@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-08",
+  "date": "2026-11-09",
   "scope": "14 test; 200 sabit tohumlu rastgele payload ve bozuk/kesik/büyük veri kontrolleri.",
   "jazzy": {
     "valid_cases": 4,

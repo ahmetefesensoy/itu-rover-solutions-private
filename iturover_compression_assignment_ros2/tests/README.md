@@ -1,6 +1,6 @@
 # Çözüm testleri
 
-8 Kasım 2026 son kontrolü: 14 test; 200 sabit tohumlu rastgele payload ve bozuk/kesik/büyük veri kontrolleri.
+9 Kasım 2026 son kontrolü: 14 test; 200 sabit tohumlu rastgele payload ve bozuk/kesik/büyük veri kontrolleri.
 
 Depo kökünden:
 

@@ -51,20 +51,28 @@ test_clock_rewind_resets_pose_and_inputs (test_solutions.TestOdometry) ... ok
 test_constant_speed_independent_of_timer_frequency (test_solutions.TestOdometry) ... ok
 test_exact_pair_required (test_solutions.TestOdometry) ... ok
 test_first_interval_is_not_lost (test_solutions.TestOdometry) ... ok
+test_imu_rate_does_not_depend_on_timer_tick (test_solutions.TestOdometry) ... ok
 test_invalid_imu_covariance (test_solutions.TestOdometry) ... ok
 test_missing_one_side (test_solutions.TestOdometry) ... ok
 test_new_wheel_speed_does_not_change_previous_interval (test_solutions.TestOdometry) ... ok
 test_normalized_quaternion (test_solutions.TestOdometry) ... ok
 test_overflowing_speed_holds_finite_pose (test_solutions.TestOdometry) ... ok
+test_recording_clock_rewind_reanchors_heading (test_solutions.TestOdometry) ... ok
+test_recording_policy_accepts_only_flagged_q14_scale (test_solutions.TestOdometry) ... ok
+test_recording_policy_keeps_stale_imu_stopped (test_solutions.TestOdometry) ... ok
+test_recording_square_has_four_corners_and_closes (test_solutions.TestOdometry) ... ok
 test_recovery_does_not_bridge_missing_interval (test_solutions.TestOdometry) ... ok
 test_reverse_10_m (test_solutions.TestOdometry) ... ok
+test_scaled_recording_heading_ignores_wheel_turn_bias (test_solutions.TestOdometry) ... ok
 test_stale_data_stops_and_holds (test_solutions.TestOdometry) ... ok
 test_straight_10_m (test_solutions.TestOdometry) ... ok
+test_strict_policy_rejects_flagged_q14 (test_solutions.TestOdometry) ... ok
+test_unknown_orientation_policy_rejected (test_solutions.TestOdometry) ... ok
 test_wheel_circle_without_imu (test_solutions.TestOdometry) ... ok
 test_wheel_in_place_rotation (test_solutions.TestOdometry) ... ok
 test_yaw_wrap (test_solutions.TestOdometry) ... ok
 
 ----------------------------------------------------------------------
-Ran 65 tests in 0.309s
+Ran 73 tests in 0.368s
 
 OK

@@ -1,6 +1,6 @@
 # Çözüm testleri
 
-8 Kasım 2026 son kontrolü: 10 test; 16 tuş birleşimi ve duruş/kapanış senaryoları. Gazebo Classic ile hareket ve duruş ölçümü.
+9 Kasım 2026 son kontrolü: 10 test; 16 tuş birleşimi ve duruş/kapanış senaryoları. Gazebo Classic ile hareket ve duruş ölçümü.
 
 Depo kökünden:
 

@@ -23,6 +23,22 @@ def quaternion_yaw(x, y, z, w):
     return math.atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z))
 
 
+def recording_orientation_allowed(quaternion, orientation_available, policy):
+    """Honor ROS validity, except for an explicitly selected recording adapter.
+
+    The assignment bag stores Q14-sized quaternions but flags orientation as
+    absent. The compatibility policy accepts this exact encoding convention;
+    it never accepts a flagged-invalid unit quaternion or arbitrary scale.
+    """
+    if policy not in ("strict", "assignment_q14"):
+        raise ValueError("orientation_policy must be strict or assignment_q14")
+    if orientation_available:
+        return True
+    return (policy == "assignment_q14" and len(quaternion) == 4
+            and all(math.isfinite(v) for v in quaternion)
+            and abs(math.hypot(*quaternion) - 16384.0) <= 163.84)
+
+
 @dataclass(frozen=True)
 class Estimate:
     x: float
@@ -34,16 +50,19 @@ class Estimate:
 
 
 class OdometryIntegrator:
-    def __init__(self, wheel_radius=0.135, sensor_timeout=0.5, max_dt=0.5, wheel_separation=0.890, heading_source="wheel"):
+    def __init__(self, wheel_radius=0.135, sensor_timeout=0.5, max_dt=0.5, wheel_separation=0.890, heading_source="wheel", orientation_policy="strict"):
         if not all(math.isfinite(v) and v > 0 for v in (wheel_radius, sensor_timeout, max_dt, wheel_separation)):
             raise ValueError("odometry parameters must be finite and positive")
         if heading_source not in ("wheel", "imu"):
             raise ValueError("heading_source must be wheel or imu")
+        if orientation_policy not in ("strict", "assignment_q14"):
+            raise ValueError("orientation_policy must be strict or assignment_q14")
         self.wheel_radius = wheel_radius
         self.sensor_timeout = sensor_timeout
         self.max_dt = max_dt
         self.wheel_separation = wheel_separation
         self.heading_source = heading_source
+        self.orientation_policy = orientation_policy
         self.reset_count = 0
         self.reset()
 
@@ -53,6 +72,7 @@ class OdometryIntegrator:
         self.x = self.y = self.yaw = 0.0
         self.observed_time = self.last_step = None
         self.was_fresh = False
+        self.imu_rate = 0.0
 
     def observe_time(self, now):
         if not math.isfinite(now):
@@ -66,29 +86,41 @@ class OdometryIntegrator:
     def wheel(self, side, values, now):
         # Integrate up to the receipt time with the PREVIOUS wheel speeds.
         # Applying a new speed to the preceding timer interval biases distance.
-        if self.heading_source == "wheel":
-            self.step(now)
-        self.observe_time(now)
-        rpm = average_pair(values)
         if side not in ("left", "right"):
             raise ValueError("unknown wheel side")
+        rpm = average_pair(values)
+        previous = getattr(self, side)
+        if self.heading_source == "wheel" or previous is None or rpm != previous[0]:
+            self.step(now)
+        self.observe_time(now)
         setattr(self, side, None if rpm is None else (rpm, now))
-        if self.heading_source == "wheel":
-            # The interval starts when BOTH samples become available, rather
-            # than one timer tick later. This also anchors recovery after gaps.
-            self.was_fresh = all(s is not None and 0 <= now - s[1] <= self.sensor_timeout
-                                 for s in (self.left, self.right))
+        # Anchor the interval as soon as all required samples are available.
+        required = (self.left, self.right) if self.heading_source == "wheel" else (self.left, self.right, self.heading)
+        self.was_fresh = all(s is not None and 0 <= now - s[1] <= self.sensor_timeout for s in required)
+        if self.was_fresh and self.heading_source == "imu":
+            self.yaw = self.heading[0]
         return rpm is not None
 
     def imu(self, quaternion, now, orientation_available=True):
         self.observe_time(now)
-        yaw = quaternion_yaw(*quaternion) if orientation_available else None
+        allowed = recording_orientation_allowed(quaternion, orientation_available, self.orientation_policy)
+        yaw = quaternion_yaw(*quaternion) if allowed else None
         if yaw is None:
             self.heading = None
+            if self.heading_source == "imu":
+                self.was_fresh = False
+            self.imu_rate = 0.0
             return False
         if self.origin is None:
             self.origin = yaw
-        self.heading = (wrap(yaw - self.origin), now)
+        relative_yaw = wrap(yaw - self.origin)
+        previous = self.heading
+        self.imu_rate = 0.0
+        if previous is not None and 0 < now - previous[1] <= self.sensor_timeout:
+            self.imu_rate = wrap(relative_yaw - previous[0]) / (now - previous[1])
+        self.heading = (relative_yaw, now)
+        if self.heading_source == "imu":
+            self.step(now)
         return True
 
     def step(self, now):
@@ -112,6 +144,7 @@ class OdometryIntegrator:
                 yaw = wrap(self.yaw + angular * dt) if valid_interval else self.yaw
             else:
                 yaw = self.heading[0]
+                angular = self.imu_rate
             if valid_interval:
                 delta = angular * dt if self.heading_source == "wheel" else wrap(yaw - self.yaw)
                 half = delta / 2.0
@@ -120,7 +153,8 @@ class OdometryIntegrator:
                 distance = linear * dt * scale
                 self.x += distance * math.cos(self.yaw + half)
                 self.y += distance * math.sin(self.yaw + half)
-                angular = delta / dt
+                if self.heading_source == "wheel":
+                    angular = delta / dt
             self.yaw = yaw
         self.was_fresh = fresh
         return Estimate(self.x, self.y, self.yaw, linear, angular, fresh)

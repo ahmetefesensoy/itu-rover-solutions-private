@@ -2,9 +2,9 @@ Starting >>> iturover_compression_assignment
 Starting >>> iturover_odometry_assignment
 Starting >>> iturover_processing_assignment
 Starting >>> reactive_robot_sim
-Finished <<< iturover_compression_assignment [0.19s]
-Finished <<< iturover_processing_assignment [0.24s]
-Finished <<< iturover_odometry_assignment [0.25s]
-Finished <<< reactive_robot_sim [0.51s]
+Finished <<< iturover_compression_assignment [0.25s]
+Finished <<< iturover_processing_assignment [0.28s]
+Finished <<< iturover_odometry_assignment [0.33s]
+Finished <<< reactive_robot_sim [0.49s]
 
-Summary: 4 packages finished [0.76s]
+Summary: 4 packages finished [0.93s]

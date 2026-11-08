@@ -1,5 +1,8 @@
 # Referans rota ile farkın incelenmesi — 9 Kasım 2026
 
+Bu incelemeden sonra çözüm düzeltildi. Güncel uygulama, test ve kayıt varsayımı:
+[ODOMETRY_CORRECTION.md](ODOMETRY_CORRECTION.md).
+
 Mevcut teker odometrisi matematik testlerini geçiyor ancak verilen bag'de
 ödevin örnek görselindeki yaklaşık dörtgen rotayı üretmiyor. Önceki 3,65 cm
 karşılaştırma aynı teker modeliyle yapılan iki integrasyonun sayısal farkıdır;

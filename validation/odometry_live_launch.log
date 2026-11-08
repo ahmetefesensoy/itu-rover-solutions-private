@@ -1,0 +1,32 @@
+[INFO] [launch]: All log files can be found below /home/ahmetefesensoy/.ros/log/2026-11-09-00-08-43-066327-DESKTOP-OL5KRDK-25878
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [odometry.py-1]: process started with pid [25881]
+[INFO] [ros2-2]: process started with pid [25882]
+[ros2-2] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1794172123.372298448] [rosbag2_storage]: Opened database '/tmp/itu-rover-validation/install/iturover_odometry_assignment/share/iturover_odometry_assignment/rosbag/scenario/scenario_0.db3' for READ_ONLY.
+[ros2-2] [INFO] [1794172123.372438748] [rosbag2_player]: Set rate to 4
+[ros2-2] [INFO] [1794172123.381731967] [rosbag2_player]: Adding keyboard callbacks.
+[ros2-2] [INFO] [1794172123.381776106] [rosbag2_player]: Press SPACE for Pause/Resume
+[ros2-2] [INFO] [1794172123.381781635] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[ros2-2] [INFO] [1794172123.381784449] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[ros2-2] [INFO] [1794172123.381786973] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[ros2-2] [INFO] [1794172123.383043265] [rosbag2_player]: Playback until timestamp: -1
+[odometry.py-1] [INFO] [1794172123.426610919] [rover_odometry]: Odometry ready; heading=imu, track=0.89m; stale inputs stop integration, clock rewinds reset pose.
+[odometry.py-1] [WARN] [1794172123.426909777] [rover_odometry]: Assignment Q14 recording adapter enabled: normalizing Q14 quaternions despite the recording's unavailable-orientation flag. Use strict for live sensors.
+[odometry.py-1] [INFO] [1794172123.434678324] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.
+[odometry.py-1] [INFO] [1794172123.534646258] [rover_odometry]: Sensor inputs ready.
+[INFO] [ros2-2]: process has finished cleanly [pid 25882]
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [odometry.py-1]: sending signal 'SIGINT' to process[odometry.py-1]
+[odometry.py-1] Traceback (most recent call last):
+[odometry.py-1]   File "/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py", line 108, in <module>
+[odometry.py-1]     main()
+[odometry.py-1]   File "/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py", line 102, in main
+[odometry.py-1]     node.destroy_node()
+[odometry.py-1]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1958, in destroy_node
+[odometry.py-1]     self.destroy_subscription(self._subscriptions[0])
+[odometry.py-1]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1854, in destroy_subscription
+[odometry.py-1]     subscription.destroy()
+[odometry.py-1]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/subscription.py", line 101, in destroy
+[odometry.py-1]     self.handle.destroy_when_not_in_use()
+[odometry.py-1] KeyboardInterrupt
+[ERROR] [odometry.py-1]: process has died [pid 25881, exit code -2, cmd '/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py --ros-args -r __node:=rover_odometry --params-file /tmp/launch_params_rqsozv6t'].

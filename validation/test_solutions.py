@@ -144,6 +144,79 @@ class TestImage(unittest.TestCase):
 
 
 class TestOdometry(unittest.TestCase):
+    def test_strict_policy_rejects_flagged_q14(self):
+        core = OdometryIntegrator(heading_source="imu")
+        self.assertFalse(core.imu((0, 0, 0, 16384), 0, orientation_available=False))
+
+    def test_recording_policy_accepts_only_flagged_q14_scale(self):
+        core = OdometryIntegrator(heading_source="imu", orientation_policy="assignment_q14")
+        self.assertTrue(core.imu((0, 0, 0, 16384), 0, orientation_available=False))
+        for bad in ((0,0,0,1), (0,0,0,100), (0,0,0,0), (math.nan,0,0,16384)):
+            with self.subTest(q=bad):
+                self.assertFalse(core.imu(bad, .1, orientation_available=False))
+
+    def test_scaled_recording_heading_ignores_wheel_turn_bias(self):
+        core = OdometryIntegrator(heading_source="imu", orientation_policy="assignment_q14")
+        for i in range(101):
+            t = i*.1
+            factor = 60 / (2*math.pi*.135)
+            core.wheel("left", [.8*factor]*2, t)
+            core.wheel("right", [1.2*factor]*2, t)
+            core.imu((0,0,0,16384), t, orientation_available=False)
+            state = core.step(t)
+        self.assertAlmostEqual(state.x, 10, places=10)
+        self.assertEqual((state.y,state.yaw), (0,0))
+
+    def test_recording_square_has_four_corners_and_closes(self):
+        core = OdometryIntegrator(heading_source="imu", orientation_policy="assignment_q14")
+        factor = 60 / (2*math.pi*.135)
+        t=0.0
+        for side in range(4):
+            angle=side*math.pi/2
+            for _ in range(101):
+                core.wheel("left",[factor]*2,t)
+                core.wheel("right",[factor]*2,t)
+                core.imu((0,0,16384*math.sin(angle/2),16384*math.cos(angle/2)),t,False)
+                state=core.step(t)
+                t+=.01
+            # Turn in place: keep movement at zero while heading changes.
+            for j in range(1,101):
+                yaw=angle+j*.01*math.pi/2
+                core.wheel("left",[0,0],t)
+                core.wheel("right",[0,0],t)
+                core.imu((0,0,16384*math.sin(yaw/2),16384*math.cos(yaw/2)),t,False)
+                state=core.step(t)
+                t+=.01
+        self.assertLess(math.hypot(state.x,state.y),.03)
+        self.assertAlmostEqual(state.yaw,0,places=8)
+
+    def test_imu_rate_does_not_depend_on_timer_tick(self):
+        core=OdometryIntegrator(heading_source="imu")
+        self.samples(core,0,yaw=0)
+        self.samples(core,.1,yaw=.1)
+        self.assertAlmostEqual(core.step(.1).angular,1)
+        self.assertAlmostEqual(core.step(.11).angular,1)
+
+    def test_recording_policy_keeps_stale_imu_stopped(self):
+        core=OdometryIntegrator(heading_source="imu",orientation_policy="assignment_q14")
+        self.samples(core,0)
+        core.step(0)
+        core.wheel("left",[60,60],1)
+        core.wheel("right",[60,60],1)
+        self.assertFalse(core.step(1).fresh)
+
+    def test_recording_clock_rewind_reanchors_heading(self):
+        core=OdometryIntegrator(heading_source="imu",orientation_policy="assignment_q14")
+        core.imu((0,0,16384,0),10,False)
+        core.step(1)
+        core.imu((0,0,0,16384),1,False)
+        self.assertEqual(core.reset_count,1)
+        self.assertEqual(core.heading[0],0)
+
+    def test_unknown_orientation_policy_rejected(self):
+        with self.assertRaises(ValueError):
+            OdometryIntegrator(orientation_policy="ignore_everything")
+
     def test_first_interval_is_not_lost(self):
         core = OdometryIntegrator()
         rpm = 60 / (2 * math.pi * .135)

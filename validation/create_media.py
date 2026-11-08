@@ -96,29 +96,44 @@ def odometry():
     core, path, _, _ = replay(samples)
     rx, ry, distance, ref_path = reference(samples)
     path, ref_path = np.array(path), np.array(ref_path)
+    live_file=ROOT/"validation/odometry_live_samples.json"
+    if live_file.exists():
+        live=json.loads(live_file.read_text())
+        path=np.array([[s["x"],s["y"]] for s in live])
+        source_times=np.array([s["stamp"]-live[0]["stamp"] for s in live])
+        label="Actual ROS2 /odom output (corrected IMU recording profile)"
+    else:
+        source_times=np.linspace(0,191.3149,len(path))
+        label="Corrected wheel speed + normalized IMU heading"
     fig, ax = plt.subplots(figsize=(12.8, 7.2), dpi=100)
     ax.plot(ref_path[:,0], ref_path[:,1], color="#bec7cf", lw=3, label="Independent numerical reference")
-    route, = ax.plot([], [], color="#126ad4", lw=2, label="Our wheel odometry")
+    route, = ax.plot([], [], color="#126ad4", lw=2, label=label)
     dot, = ax.plot([], [], "o", color="#ee7920", ms=8)
-    title = ax.set_title("Recorded wheel data | our solution replay")
+    title = ax.set_title("Corrected assignment recording | real ROS2 odometry")
     ax.set(xlabel="x (m)", ylabel="y (m)")
     ax.axis("equal")
     ax.grid(alpha=.25)
     ax.legend(loc="upper left")
-    fig.text(.5, .02, f"23,483 sensor messages | numerical endpoint difference: {math.hypot(core.x-rx,core.y-ry):.4f} m | no measured ground truth", ha="center", fontsize=10)
+    fig.text(.5, .02, "Wheel RPM speed + normalized Q14 IMU heading | explicit recording adapter | no measured ground truth", ha="center", fontsize=10)
     fig.tight_layout(rect=[0,.04,1,.98])
     movie = Movie(target / "solution_demo.mp4")
     for index in np.linspace(1, len(path), 320, dtype=int):
         route.set_data(path[:index,0], path[:index,1])
         dot.set_data([path[index-1,0]], [path[index-1,1]])
-        title.set_text(f"Our odometry | recorded time {index/len(path)*191.3149:.1f} / 191.3 s | accelerated replay")
+        title.set_text(f"Corrected ROS2 /odom | recorded time {source_times[index-1]:.1f} / 191.3 s | accelerated replay")
         fig.canvas.draw()
         rgb = np.asarray(fig.canvas.buffer_rgba())[:,:,:3]
         movie.write(cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
     movie.close()
     fig.savefig(target / "preview.png")
     plt.close(fig)
-    (target / "README.md").write_text("# Bizim odometry sonucumuz\n\n[solution_demo.mp4](solution_demo.mp4) gerçek bag'deki sensörlerden hesaplanan rotanın hızlandırılmış çizimidir. Bu bir rota animasyonudur. Gri çizgi bağımsız sayısal referans, mavi çizgi çözümümüzdür. 3,65 cm son konum farkı sayısal tutarlılık ölçüsüdür; gerçek araç konum hatası değildir.\n\n![Rota](preview.png)\n", encoding="utf-8")
+    _,old_path,_,_=replay(samples,heading_source="wheel",orientation_policy="strict")
+    fig,axes=plt.subplots(1,2,figsize=(13,6))
+    for ax,points,title in ((axes[0],np.array(old_path),"Previous: wheel-derived yaw (over-rotation)"),(axes[1],path,"Corrected: real ROS2 wheel speed + IMU yaw")):
+        ax.plot(points[:,0],points[:,1]);ax.axis("equal");ax.grid(alpha=.3)
+        ax.set(title=title,xlabel="x (m)",ylabel="y (m)")
+    fig.tight_layout();fig.savefig(target/"before_after.png",dpi=150);plt.close(fig)
+    (target / "README.md").write_text("# Düzeltilmiş odometry sonucumuz\n\n[solution_demo.mp4](solution_demo.mp4) tam bag oynatılırken gerçek ROS2 node'undan kaydedilen `/odom` mesajlarının hızlandırılmış rota animasyonudur. Mavi çizgi canlı node çıktısı, gri çizgi aynı girdilerle bağımsız sayısal hesaptır.\n\nİlerleme teker RPM'lerinden, yön normalize edilmiş IMU quaternion'undan gelir. Yalnız bu kayıt için açıkça `assignment_q14` uyumluluk modu seçilmiştir; metadata çelişkisi README'de açıklanır. Canlı sensör varsayılanı strict'tir. Kayıt yaklaşık 361° dönüş yapar; rota dörtgene döner. Gerçek konum referansı olmadığı için yüzde doğruluk iddiası yoktur.\n\n![Düzeltilmiş rota](preview.png)\n\n![Önce ve sonra](before_after.png)\n", encoding="utf-8")
     print("odometry media complete", flush=True)
 
 
@@ -161,7 +176,12 @@ def compression(repo, label):
 
 
 if __name__ == "__main__":
-    processing()
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--only",choices=("odometry","all"),default="all")
+    args=parser.parse_args()
+    if args.only=="all":processing()
     odometry()
-    compression("iturover_compression_assignment_ros2", "ROS 2")
-    compression("iturover_compression_assignment", "ROS 1 Noetic")
+    if args.only=="all":
+        compression("iturover_compression_assignment_ros2", "ROS 2")
+        compression("iturover_compression_assignment", "ROS 1 Noetic")

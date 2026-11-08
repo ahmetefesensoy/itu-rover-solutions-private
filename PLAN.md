@@ -1,5 +1,9 @@
 # ITU Rover ödevleri: çalışma planı
 
+9 Kasım düzeltmesi: odometry'nin eski teker-yön modeli yerine kayıt için
+teker hızı + normalize Q14 IMU yönü uygulanır. Canlı kullanım strict'tir.
+73 test ve gerçek ROS2 bag çıktısı geçti; [güncel rapor](validation/ODOMETRY_CORRECTION.md).
+
 Depodaki beş repo, ekrandaki sırayla ele alınacak. Obstacle Avoidance repo kapsam dışında.
 
 1. [x] `iturover_processing_assignment_ros2`: görüntü filtresi node'u, senaryo çalıştırma yönergeleri ve filtre yayın döngüsü tamamlandı.

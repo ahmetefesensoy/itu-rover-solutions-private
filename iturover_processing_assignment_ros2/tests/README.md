@@ -1,6 +1,6 @@
 # Çözüm testleri
 
-8 Kasım 2026 son kontrolü: 8 test; 12 bag karesinde 48 filtre çıktısı kontrolü. JPEG kayıplıdır.
+9 Kasım 2026 son kontrolü: 8 test; 12 bag karesinde 48 filtre çıktısı kontrolü. JPEG kayıplıdır.
 
 Depo kökünden:
 

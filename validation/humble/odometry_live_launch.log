@@ -1,0 +1,32 @@
+[INFO] [launch]: All log files can be found below /root/.ros/log/2026-11-08-21-12-59-841624-61de24755f29-320
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [odometry.py-1]: process started with pid [321]
+[INFO] [ros2-2]: process started with pid [323]
+[ros2-2] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1794172380.113087233] [rosbag2_storage]: Opened database '/tmp/itu-rover-validation/install/iturover_odometry_assignment/share/iturover_odometry_assignment/rosbag/scenario/scenario_0.db3' for READ_ONLY.
+[ros2-2] [INFO] [1794172380.113443872] [rosbag2_player]: Set rate to 4
+[ros2-2] [INFO] [1794172380.130276559] [rosbag2_player]: Adding keyboard callbacks.
+[ros2-2] [INFO] [1794172380.130325929] [rosbag2_player]: Press SPACE for Pause/Resume
+[ros2-2] [INFO] [1794172380.130333489] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[ros2-2] [INFO] [1794172380.130337343] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[ros2-2] [INFO] [1794172380.130340616] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[ros2-2] [INFO] [1794172380.131047274] [rosbag2_storage]: Opened database '/tmp/itu-rover-validation/install/iturover_odometry_assignment/share/iturover_odometry_assignment/rosbag/scenario/scenario_0.db3' for READ_ONLY.
+[odometry.py-1] [INFO] [1794172380.147555817] [rover_odometry]: Odometry ready; heading=imu, track=0.89m; stale inputs stop integration, clock rewinds reset pose.
+[odometry.py-1] [WARN] [1794172380.147897473] [rover_odometry]: Assignment Q14 recording adapter enabled: normalizing Q14 quaternions despite the recording's unavailable-orientation flag. Use strict for live sensors.
+[odometry.py-1] [INFO] [1794172380.152780275] [rover_odometry]: Waiting for fresh, valid required sensor inputs; holding position.
+[odometry.py-1] [INFO] [1794172380.233088966] [rover_odometry]: Sensor inputs ready.
+[INFO] [ros2-2]: process has finished cleanly [pid 323]
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [odometry.py-1]: sending signal 'SIGINT' to process[odometry.py-1]
+[odometry.py-1] Traceback (most recent call last):
+[odometry.py-1]   File "/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py", line 108, in <module>
+[odometry.py-1]     main()
+[odometry.py-1]   File "/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py", line 102, in main
+[odometry.py-1]     node.destroy_node()
+[odometry.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 1687, in destroy_node
+[odometry.py-1]     self.destroy_subscription(self._subscriptions[0])
+[odometry.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/node.py", line 1583, in destroy_subscription
+[odometry.py-1]     subscription.destroy()
+[odometry.py-1]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/subscription.py", line 80, in destroy
+[odometry.py-1]     self.handle.destroy_when_not_in_use()
+[odometry.py-1] KeyboardInterrupt
+[ERROR] [odometry.py-1]: process has died [pid 321, exit code -2, cmd '/tmp/itu-rover-validation/install/iturover_odometry_assignment/lib/iturover_odometry_assignment/odometry.py --ros-args -r __node:=rover_odometry --params-file /tmp/launch_params_gg0e45g1'].

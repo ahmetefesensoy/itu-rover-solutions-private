@@ -31,8 +31,8 @@ def read_bag(path):
             yield name, timestamp * 1e-9, deserialize_message(data, msg_type)
 
 
-def replay(samples):
-    core = OdometryIntegrator()
+def replay(samples, heading_source="imu", orientation_policy="assignment_q14"):
+    core = OdometryIntegrator(heading_source=heading_source, orientation_policy=orientation_policy)
     next_tick = samples[0][1]
     path = []
     invalid = 0
@@ -62,26 +62,35 @@ def replay(samples):
 
 
 def reference(samples):
-    # Event-time Euler integration, independent of the 50 Hz arc integrator.
+    # Independent event-time Euler integration using normalized IMU heading.
     left = right = None
-    yaw = 0.0
+    yaw = origin = None
     last = samples[0][1]
     x = y = distance = 0.0
     path = []
     for topic, stamp, msg in samples:
-        if left is not None and right is not None:
+        if left is not None and right is not None and yaw is not None:
             speed = .135 * math.pi / 60 * (left + right)
-            angular = .135 * 2 * math.pi / 60 * (right - left) / .890
             dt = stamp - last
             x += speed * math.cos(yaw) * dt
             y += speed * math.sin(yaw) * dt
-            yaw += angular * dt
             distance += abs(speed) * dt
         last = stamp
         if topic.endswith("left_motors_feedbacks"):
             left = float(np.mean(msg.data))
         elif topic.endswith("right_motors_feedbacks"):
             right = float(np.mean(msg.data))
+        else:
+            q = np.array([msg.orientation.x,msg.orientation.y,msg.orientation.z,msg.orientation.w])
+            q = q / np.linalg.norm(q)
+            # Quaternion rotation of the forward vector, independent of core.
+            xyz, scalar = q[:3], q[3]
+            forward=np.array([1.,0.,0.])
+            vector=forward + 2*np.cross(xyz,np.cross(xyz,forward)+scalar*forward)
+            absolute=math.atan2(vector[1],vector[0])
+            if origin is None:
+                origin=absolute
+            yaw=absolute-origin
         path.append((x, y))
     return x, y, distance, path
 
@@ -96,16 +105,28 @@ def main():
     rx, ry, distance, ref_path = reference(samples)
     error = math.hypot(core.x-rx, core.y-ry)
     assert all(math.isfinite(v) for point in path for v in point)
-    assert invalid == 0, f"Unexpected invalid bag samples: {invalid}"
+    assert invalid == 0 and invalid_imu == 0, f"Unexpected rejected bag samples: {invalid}, {invalid_imu}"
     assert error < max(.1, distance * .01), (error, distance)
+    closure = math.hypot(core.x,core.y)
+    assert closure / distance < .05, "Recorded near-closed route became a drifting loop"
+    from odometry_core import quaternion_yaw
+    headings=[quaternion_yaw(msg.orientation.x,msg.orientation.y,msg.orientation.z,msg.orientation.w)
+              for topic,_,msg in samples if topic=="/imu1/data"]
+    total_turn=float(np.degrees(np.unwrap(headings)[-1]-np.unwrap(headings)[0]))
+    assert 350 < total_turn < 370, total_turn
     # Replay the beginning into the same core to prove it resets on rewind.
     core.observe_time(samples[0][1])
     assert core.reset_count == 1 and core.x == 0 and core.y == 0
     results = {"odometry": {"sensor_messages": len(samples), "duration_s": samples[-1][1]-samples[0][1],
                            "solution_final_xy_m": [again.x, again.y], "reference_final_xy_m": [rx, ry],
                            "reference_path_length_m": distance, "endpoint_difference_m": error,
-                           "invalid_wheel_samples": invalid, "invalid_imu_samples_ignored_in_wheel_mode": invalid_imu,
-                           "heading_source": "wheel", "wheel_separation_m": .890,
+                           "invalid_wheel_samples": invalid, "rejected_imu_samples": invalid_imu,
+                           "heading_source": "imu", "orientation_policy":"assignment_q14",
+                           "adapted_recording_orientation_flags":len(headings),
+                           "recorded_total_turn_deg":total_turn,"closure_distance_m":closure,
+                           "closure_to_path_ratio":closure/distance,
+                           "orientation_assumption":"Known assignment recording: Q14 quaternion normalization despite unavailable flags; strict policy remains the live default.",
+                           "wheel_separation_m": .890,
                            "replay_identical": True, "rewind_reset": True,
                            "note": "Numerical comparison only; no measured ground-truth trajectory provided."}}
     image_bag = ROOT / "iturover_processing_assignment_ros2/rosbag/assignment/assignment_0.db3"
@@ -144,8 +165,8 @@ def main():
         return
     fig, ax = plt.subplots(figsize=(8, 6))
     ax.plot(*zip(*ref_path), label="Event-time reference", color="gray", linewidth=3)
-    ax.plot(*zip(*path), label="Solution (50 Hz)", color="#1177cc", linewidth=1)
-    ax.set(xlabel="x (m)", ylabel="y (m)", title="Recorded odometry: numerical consistency")
+    ax.plot(*zip(*path), label="Corrected wheel speed + normalized IMU heading", color="#1177cc", linewidth=1)
+    ax.set(xlabel="x (m)", ylabel="y (m)", title="Assignment recording: corrected odometry")
     ax.axis("equal")
     ax.grid(alpha=.3)
     ax.legend()

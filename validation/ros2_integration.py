@@ -152,7 +152,7 @@ class Harness:
         right = self.node.create_publisher(Float64MultiArray, "/drive_system_right_motors_feedbacks", qos_profile_sensor_data)
         imu = self.node.create_publisher(Imu, "/imu1/data", qos_profile_sensor_data)
         clock = self.node.create_publisher(Clock, "/clock", 10)
-        proc = self.start("iturover_odometry_assignment", "odometry.py", "--ros-args", "-p", "use_sim_time:=true")
+        proc = self.start("iturover_odometry_assignment", "odometry.py", "--ros-args", "-p", "use_sim_time:=true", "-p", "heading_source:=wheel")
         self.wait(lambda: all(p.get_subscription_count() > 0 for p in (left, right, imu, clock)) and self.node.count_publishers("/odom") > 0)
 
         def send(t, sensors=True):
@@ -230,6 +230,45 @@ class Harness:
         self.node.destroy_subscription(sub)
         self.report["keyboard_ros2"] = {"uppercase": True, "combined_keys": True, "release": True, "60_second_stop": True, "headless_event_injection": True}
 
+    def odometry_imu_recording(self):
+        received=[]
+        sub=self.node.create_subscription(Odometry,"/odom",received.append,20)
+        left=self.node.create_publisher(Float64MultiArray,"/drive_system_left_motors_feedbacks",qos_profile_sensor_data)
+        right=self.node.create_publisher(Float64MultiArray,"/drive_system_right_motors_feedbacks",qos_profile_sensor_data)
+        imu=self.node.create_publisher(Imu,"/imu1/data",qos_profile_sensor_data)
+        clock=self.node.create_publisher(Clock,"/clock",10)
+        proc=self.start("iturover_odometry_assignment","odometry.py","--ros-args","-p","use_sim_time:=true","-p","heading_source:=imu","-p","orientation_policy:=assignment_q14")
+        self.wait(lambda:all(p.get_subscription_count()>0 for p in (left,right,imu,clock)))
+        def send(t,angle,moving=True,scale=16384):
+            timestamp=Clock()
+            timestamp.clock.sec,timestamp.clock.nanosec=divmod(round(t*1e9),10**9)
+            clock.publish(timestamp);self.pump(.03)
+            factor=60/(2*math.pi*.135)
+            left.publish(Float64MultiArray(data=[.8*factor if moving else 0.0]*2))
+            right.publish(Float64MultiArray(data=[1.2*factor if moving else 0.0]*2))
+            self.pump(.02)
+            orientation=Imu()
+            orientation.orientation.z=scale*math.sin(angle/2)
+            orientation.orientation.w=scale*math.cos(angle/2)
+            orientation.orientation_covariance[0]=-1.0
+            imu.publish(orientation);self.pump(.03)
+        for i in range(12):send(10+i*.1,0)
+        self.wait(lambda:received and received[-1].twist.twist.linear.x>.9)
+        assert abs(received[-1].pose.pose.position.y)<1e-8
+        assert abs(received[-1].pose.pose.orientation.z)<1e-8
+        for i in range(3):send(11.2+i*.1,math.pi/2,moving=False)
+        turn_x=received[-1].pose.pose.position.x
+        for i in range(12):send(11.5+i*.1,math.pi/2)
+        self.wait(lambda:received[-1].pose.pose.position.y>.8)
+        assert abs(received[-1].pose.pose.position.x-turn_x)<.02
+        send(12.7,math.pi/2,scale=1)
+        send(12.8,math.pi/2,scale=1)
+        self.wait(lambda:received[-1].twist.twist.linear.x==0)
+        self.report["odometry_imu_recording_ros2"]={"q14_flag_adapter":True,"wheel_yaw_bias_ignored":True,"ninety_degree_turn":True,"flagged_unit_quaternion_rejected":True,"x_after_turn_m":turn_x}
+        self.stop(proc)
+        self.node.destroy_subscription(sub)
+        for publisher in (left,right,imu,clock):self.node.destroy_publisher(publisher)
+
     def close(self):
         for proc in self.children:
             self.stop(proc)
@@ -244,7 +283,7 @@ class Harness:
 if __name__ == "__main__":
     harness = Harness()
     try:
-        for check in (harness.compression, harness.images, harness.odometry, harness.keyboard):
+        for check in (harness.compression, harness.images, harness.odometry, harness.odometry_imu_recording, harness.keyboard):
             check()
             print("PASS", check.__name__, flush=True)
         (RESULTS / "ros2_results.json").write_text(json.dumps(harness.report, indent=2) + "\n")

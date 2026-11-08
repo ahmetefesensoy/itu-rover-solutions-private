@@ -40,8 +40,8 @@
     "width": 1280,
     "height": 720,
     "sampled_frames_decode": true,
-    "visible_change_mean": 1.3680013020833333,
-    "bytes": 129040
+    "visible_change_mean": 1.3299291087962963,
+    "bytes": 118240
   },
   "iturover_processing_assignment_ros2": {
     "file": "iturover_processing_assignment_ros2/media/solution/solution_demo.mp4",

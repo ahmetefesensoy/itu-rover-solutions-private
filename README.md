@@ -8,9 +8,11 @@ Obstacle avoidance bu pakete dahil değildir.
 `SHOWCASE.html` dosyasını tarayıcıda açın. GitHub'dan da aşağıdaki video
 bağlantılarıyla tek tek görüntüleyebilir veya indirebilirsiniz.
 
-65 birim testi Jazzy ve Humble'da geçti. Bu bir test başarı oranıdır;
-gerçek araç konumu için yüzde doğruluk ölçümü değildir. Odometry'nin 3,65 cm
-farkı aynı girdilerle hesaplanan bağımsız sayısal referansa göredir.
+73 birim testi Jazzy ve Humble'da geçti. Bu bir test başarı oranıdır;
+gerçek araç konumu için yüzde doğruluk ölçümü değildir. Odometry'nin yön
+modeli düzeltildi: bu kayıt için açık Q14 uyumluluk profiliyle dörtgen rota
+üretilir. Canlı sensörlerde geçersiz yönelimi reddeden strict varsayılanı korunur.
+[9 Kasım düzeltmesi ve kapsam](validation/ODOMETRY_CORRECTION.md).
 
 ## Görüntü işleme
 
@@ -20,11 +22,11 @@ farkı aynı girdilerle hesaplanan bağımsız sayısal referansa göredir.
 
 [Bizim videomuz](iturover_processing_assignment_ros2/media/solution/solution_demo.mp4) · [Kod ve kullanım](iturover_processing_assignment_ros2/README.md) · [Ölçümler](iturover_processing_assignment_ros2/tests/results.json)
 
-## Odometry
+## Düzeltilmiş odometry
 
-23.483 mesaj; sayısal referansla 3,65 cm fark; 19/19 test.
+23.483 mesaj; teker hızı + normalize Q14 IMU yönü; gerçek ROS2 dörtgen rota; 27/27 test.
 
-[![Odometry](iturover_odometry_assignment_ros2/media/solution/preview.png)](iturover_odometry_assignment_ros2/media/solution/solution_demo.mp4)
+[![Düzeltilmiş odometry](iturover_odometry_assignment_ros2/media/solution/preview.png)](iturover_odometry_assignment_ros2/media/solution/solution_demo.mp4)
 
 [Bizim videomuz](iturover_odometry_assignment_ros2/media/solution/solution_demo.mp4) · [Kod ve kullanım](iturover_odometry_assignment_ros2/README.md) · [Ölçümler](iturover_odometry_assignment_ros2/tests/results.json)
 
@@ -51,9 +53,6 @@ Gazebo hareketi; gerçek X11 testinde 60,05 s duruş; 10/10 test.
 [![Compression ROS 1](iturover_compression_assignment/media/solution/preview.jpg)](iturover_compression_assignment/media/solution/solution_demo.mp4)
 
 [Bizim videomuz](iturover_compression_assignment/media/solution/solution_demo.mp4) · [Kod ve kullanım](iturover_compression_assignment/README.md) · [Ölçümler](iturover_compression_assignment/tests/results.json)
-
-
-**9 Kasım odometry incelemesi:** Mevcut teker modeli örnek dörtgen rotayı üretmiyor. Aynı kayıtta normalize edilmiş IMU yönelimiyle yapılan tanısal hesap dörtgen çıkıyor; ancak kayıt bu yönelimi geçersiz işaretliyor. [Karşılaştırma ve kapsam](validation/ODOMETRY_REVIEW.md). Önceki 3,65 cm sayısal uyum, gerçek rota doğruluğu değildir.
 
 ## Çalıştırma ve doğrulama
 
